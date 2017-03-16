@@ -10,13 +10,13 @@ use think\Image;
 use think\Request;
 use app\index\model\User as UserModel;
 
-class Backstage extends Controller
+class Correct extends Controller
 {
     private function judge()
     {
         $id = Session::get('user_id');
         if($id == null) {
-            return $this->redirect('index/backstage/index');
+            return $this->redirect('index/correct/index');
         }
         return UserModel::where('id',Session::get('user_id'))->find();
     }
@@ -26,11 +26,11 @@ class Backstage extends Controller
         Session::start();
         if(Session::get('user_id') != null) {
             $user = UserModel::where('id',Session::get('user_id'))->find();
-            if($user->admin == 1) {
-                return $this->redirect('index/backstage/home');
+            if($user->teacher == 1) {
+                return $this->redirect('index/correct/home');
             }
         }
-        return $this->fetch('backstage/index');
+        return $this->fetch('correct/index');
     }
 
     public function login()
@@ -42,27 +42,27 @@ class Backstage extends Controller
         if($user == null) {
             return $this->suces('用户名或密码错误');
         }
-        if($user->admin == 0) {
+        if($user->teacher == 0) {
             return $this->suces('对不起，你没有权限');
         }
         Session::set('user_id', $user->id);
         Session::set('user_name', $user->user_name);
-        return $this->redirect('index/backstage/home');
+        return $this->redirect('index/correct/home');
     }
 
     public function home()
     {
         Session::start();
         $user = $this->judge();
-        if($user->admin == 0) {
-            return $this->redirect('index/backstage/index');
+        if($user->teacher == 0) {
+            return $this->redirect('index/correct/index');
         }
-        return "backstage/home";
+        return "correct/home";
     }
 
     public function logout() {
         Session::start();
         Session::destroy();
-        return $this->redirect('index/backstage/index');
+        return $this->redirect('index/correct/index');
     }
 }
