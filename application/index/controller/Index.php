@@ -54,11 +54,14 @@ class Index extends Controller
         if($user_name == null) {
             return $this->suces('用户名不能为空');
         }
+        if(strlen($user_name) < 6) {
+            return $this->suces('用户名最少6位');
+        }
+        if(strlen($user_name) > 12) {
+            return $this->suces('用户名最多12位');
+        }
         if(UserModel::where('user_name',$user_name)->find() != null) {
             return $this->suces('用户名已被占用');
-        }
-        if(strlen($user_name) < 6) {
-            return $this->suces('用户名最少六位');
         }
         if($password1 == null) {
             return $this->suces('密码不能为空');
