@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="/static/assets/css/bootstrap.css" rel="stylesheet" />
+    <title>{if($update == 1)}报名信息{/if}
+            {if($commit == 1)}作品提交{/if}
+        {if($correct == 1)}作品审阅中{/if}</title>
+</head>
+<body>
+<div class="container">
+    <h1 style="text-align: center">"{$competition.title}"
+        {if($update == 1)}竞赛报名信息{/if}
+        {if($commit == 1)}竞赛作品提交{/if}
+        {if($correct == 1)}竞赛作品审阅中{/if}</h1>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="min-height: 0">报名信息</div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover">
+                            <tbody>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">参赛信息↓↓↓</th>
+                                <td style="width: 80%;">↓↓↓</td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">竞赛名称</th>
+                                <td style="width: 80%;">{$sign.competition.title}</td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">竞赛组别</th>
+                                <td style="width: 80%;">{$sign.title.title} 所属大类:{$sign.title.type.title}</td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">参赛题目</th>
+                                <td style="width: 80%;">
+                                    {if($sign.sign_title == null)}无{/if}
+                                    {if($sign.sign_title != null)}{$sign.sign_title}{/if}
+                                </td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">指导老师</th>
+                                <td style="width: 80%;">
+                                    {if($sign.sign_teacher == null)}无{/if}
+                                    {if($sign.sign_teacher != null)}{$sign.sign_teacher}{/if}
+                                </td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">个人(队长)信息↓↓↓</th>
+                                <td style="width: 80%;">↓↓↓</td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">学号</th>
+                                <td style="width: 80%;">{$sign.code}</td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">姓名</th>
+                                <td style="width: 80%;">{$sign.name}</td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">学院</th>
+                                <td style="width: 80%;">{$sign.collage}</td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">类别</th>
+                                <td style="width: 80%;">{$sign.type}</td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">年级</th>
+                                <td style="width: 80%;">{$sign.grade}</td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">联系方式</th>
+                                <td style="width: 80%;">{$sign.phone}</td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">邮箱</th>
+                                <td style="width: 80%;">{$sign.email}</td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">队伍信息↓↓↓</th>
+                                <td style="width: 80%;">↓↓↓</td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">队伍名称</th>
+                                <td style="width: 80%;">
+                                    {if($sign.sign_name == null)}无{/if}
+                                    {if($sign.sign_name != null)}{$sign.sign_name}{/if}
+                                </td>
+                            </tr>
+                            {volist name="sign->members" id="member" }
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">队员信息</th>
+                                <td style="width: 80%;">
+                                    {$member.info}
+                                </td>
+                            </tr>
+                            {/volist}
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">是否已提交作品</th>
+                                <td style="width: 80%;">
+                                    {if($sign.file == null)}否{/if}
+                                    {if($sign.file != null)}是{/if}
+                                </td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">竞赛时间段↓↓↓</th>
+                                <td style="width: 80%;">↓↓↓</td>
+                            </tr>
+                            {if($update == 1)}
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">报名截止时间</th>
+                                <td style="width: 80%;">{$sign.competition.end_time}</td>
+                            </tr>
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">作品提交截止时间</th>
+                                <td style="width: 80%;">{$sign.competition.commit_time}</td>
+                            </tr>
+                            {/if}
+                            {if($update == 1)}
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">作品提交截止时间</th>
+                                <td style="width: 80%;">{$sign.competition.commit_time}</td>
+                            </tr>
+                            {/if}
+                            <tr style="min-height: 51px;">
+                                <th style="width: 20%">作品审阅结束时间</th>
+                                <td style="width: 80%;">{$sign.competition.correct_time}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        {if($update == 1)}
+                        <label>"注：报名信息可多次修改，以最后一次修改为准，报名结束后可在本页面进行作品提交"
+                        </label><br/>
+                        <a href="{:url('index/index/updatesign')}"><button type="button" class="btn btn-info" style="width: 20%;">修改报名信息</button></a>
+                        {/if}
+                        {if($commit == 1)}
+                        <label>"注：作品可多次提交，取最后一次提交作品为准，上传文件大小不能超过10M，仅支持rar,zip格式压缩文件"
+                        </label><br/>
+                        <form role="form" method="post" enctype="multipart/form-data" action="{:url('index/index/upload')}">
+                            <input id="InputFile" type="file" name="file"/>
+                            <input type="submit" id="submit" class="btn btn-success" value=" 提交作品 " style="width: 20%">
+                        </form>
+                        {/if}
+                        {if($correct == 1)}
+                        <label>"注：作品审阅结束后可在本界面查询评分和获奖情况"
+                        </label><br/>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

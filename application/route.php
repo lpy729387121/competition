@@ -5,6 +5,14 @@ use think\Route;
 Route::pattern([ 'id'=>'\d+',
 ]);
 
+Route::rule('index/signforcompetition/:id','index/Index/signforcompetition');
+Route::rule('index/update/:id','index/Index/update');
+Route::rule('backstage/settype/:id','index/Backstage/settype');
+Route::rule('backstage/settitle/:id','index/Backstage/settitle');
+Route::rule('backstage/title/:id','index/Backstage/title');
+Route::rule('backstage/setonline/:id','index/Backstage/setonline');
+Route::rule('correct/setpoint/:id','index/Correct/setpoint');
+
 return [
     '__pattern__' => [
         'name' => '\w+',
@@ -18,12 +26,21 @@ return [
     'home'=>'index/index/home',
     'logout'=>'index/index/logout',
     'login'=>'index/index/login',
+    'sign'=>'index/index/sign',
+    'commit'=>'index/index/commit',
+    'upload'=>'index/index/upload',
+    'updatesign'=>'index/index/updatesign',
+    'competitionresult'=>'index/index/competitionresult',
+    'getexcel'=>'index/index/getexcel',
     'backstage'=>'index/backstage/index',
     'backstage/login'=>'index/backstage/login',
     'backstage/logout'=>'index/backstage/logout',
     'backstage/home'=>'index/backstage/home',
+    'backstage/addcompetition'=>'index/backstage/addcompetition',
     'correct'=>'index/correct/index',
     'correct/login'=>'index/correct/login',
     'correct/logout'=>'index/correct/logout',
     'correct/home'=>'index/correct/home',
+    'correct/createxvel'=>'index/correct/createxvel',
+    'correct/signexvel'=>'index/correct/signexvel',
 ];

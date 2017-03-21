@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="" name="description" />
+    <meta content="webthemez" name="author" />
+    <title>作品审阅</title>
+    <!-- Bootstrap Styles-->
+    <link href="/static/assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- FontAwesome Styles-->
+    <link href="/static/assets/css/font-awesome.css" rel="stylesheet" />
+    <!-- Morris Chart Styles-->
+    <link href="/static/assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
+    <!-- Custom Styles-->
+    <link href="/static/assets/css/custom-styles.css" rel="stylesheet" />
+    <!-- Google Fonts-->
+    <link rel="stylesheet" href="/static/assets/js/Lightweight-Chart/cssCharts.css">
+
+    <style type="text/css">
+
+        .demo1{
+
+            height:100px;
+
+        }
+
+    </style>
+</head>
+
+<body>
+<div id="wrapper">
+    <nav class="navbar navbar-default top-navbar" role="navigation">
+
+        <!-- 左边的header -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html"><strong><i
+                    class="icon fa fa-plane"></i> 选项</strong></a>
+
+            <div id="sideNav" href="">
+                <i class="fa fa-bars icon"></i>
+            </div>
+        </div>
+        <!-- 右边的bar栏目 -->
+        <ul class="nav navbar-top-links navbar-right">
+            <li class="dropdown"><a class="dropdown-toggle"
+                                    data-toggle="dropdown" href="#" aria-expanded="false"> <i
+                    class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+            </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li><a href="{:Url('index/correct/logout')}"><i class="fa fa-sign-out fa-fw"></i> 注销</a></li>
+                </ul> <!-- /.dropdown-user --></li>
+            <!-- /.dropdown -->
+        </ul>
+    </nav>
+
+
+    <!--/. NAV TOP  -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <li><a class="active-menu" href="{:url('index/correct/home')}"><i class="fa fa-dashboard"></i> 待审阅作品</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- /. NAV SIDE  -->
+
+    <div id="page-wrapper">
+        <div class="header">
+            <h1 class="page-header">作品审阅<small>Welcome {$Request.session.user_name}</small></h1>
+            <ol class="breadcrumb">
+                <li class="active"> 待审阅作品</li>
+            </ol>
+        </div>
+        <div id="page-inner">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="{:url('index/correct/signexvel')}"><button type="button" class="btn btn-info" style="width: 20%;">报名汇总excel</button></a>
+                    {if($size == 0)}
+                    <a href="{:url('index/correct/createxvel')}"><button type="button" class="btn btn-info" style="width: 20%;">评分汇总excel</button></a>
+                    {/if}
+                    <div class="panel panel-default">
+                        <div class="panel-heading" style="min-height: 0">待审阅作品列表 </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 10%">竞赛名称</th>
+                                        <th style="width: 10%">竞赛大类</th>
+                                        <th style="width: 10%">竞赛组别</th>
+                                        <th style="width: 10%">竞赛作品(文件数字后为原文件名)</th>
+                                        <th style="width: 10%">作品评分</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {volist name="list" id="list" }
+
+                                    <tr style="min-height: 51px;">
+                                        <td style="width: 10%">{$list.competition.title}</td>
+                                        <td style="width: 10%">
+                                            {$list.title.type.title}
+                                        </td>
+                                        <td style="width: 10%">
+                                            {$list.title.title}
+                                        </td>
+                                        <td style="width: 10%">
+                                            <a href="/uploads/{$list.file}">{$list.file}</a>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{$list.id}" style="margin-bottom: 20px;">
+                                                作品评分
+                                            </button>
+                                            <div class="modal fade" id="{$list.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                            <h4 class="modal-title" id="myModalLabe2">作品评分</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="col-md-8 col-md-offset-2">
+                                                                    <form role="form" method="post" enctype="multipart/form-data" action="{:url('index/correct/setpoint',['id'=>$list['id']])}">
+                                                                        <div class="form-group">
+                                                                            <label>作品分数</label><small style="color: red"> *百分制，满分100，不允许小数</small>
+                                                                            <input type="text" name="point" value="" class="form-control" maxlength="28">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label>作品评语</label><small style=""> 本评语只会对报名者显示，最多300字</small>
+                                                                            <textarea class="form-control" rows="3"  name="pingyu" maxlength="300"></textarea>
+                                                                        </div>
+                                                                        <label></label>
+                                                                        <input type="hidden" name="__token__" value="{$Request.token}" />
+                                                                        <input type="submit" id="submit" class="btn btn-success" value=" 确定 " style="width: 100%">
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {/volist}
+                                    </tbody>
+                                </table>
+                                {$page}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <footer>
+
+                </footer>
+            </div>
+            <!-- /. PAGE INNER  -->
+        </div>
+        <!-- /. PAGE WRAPPER  -->
+    </div>
+    <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="/static/assets/js/jquery-1.10.2.js"></script>
+    <!-- Bootstrap Js -->
+    <script src="/static/assets/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Js -->
+    <script src="/static/assets/js/jquery.metisMenu.js"></script>
+    <!-- Morris Chart Js -->
+    <script src="/static/assets/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="/static/assets/js/morris/morris.js"></script>
+    <script src="/static/assets/js/easypiechart.js"></script>
+    <script src="/static/assets/js/easypiechart-data.js"></script>
+    <script src="/static/assets/js/Lightweight-Chart/jquery.chart.js"></script>
+    <!-- Custom Js -->
+    <script src="/static/assets/js/custom-scripts.js"></script>
+    <!-- Chart Js -->
+    <script type="text/javascript" src="/static/assets/js/Chart.min.js"></script>
+    <script type="text/javascript" src="/static/assets/js/chartjs.js"></script>
+
+</body>
+
+</html>
