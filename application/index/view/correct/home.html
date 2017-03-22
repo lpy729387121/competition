@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta content="" name="description" />
     <meta content="webthemez" name="author" />
-    <title>作品审阅</title>
+    <title>报名列表</title>
     <!-- Bootstrap Styles-->
     <link href="/static/assets/css/bootstrap.css" rel="stylesheet" />
     <!-- FontAwesome Styles-->
@@ -66,7 +66,10 @@
     <nav class="navbar-default navbar-side" role="navigation">
         <div class="sidebar-collapse">
             <ul class="nav" id="main-menu">
-                <li><a class="active-menu" href="{:url('index/correct/home')}"><i class="fa fa-dashboard"></i> 待审阅作品</a></li>
+                <li><a class="active-menu" href="{:url('index/correct/home')}"><i class="fa fa-dashboard"></i> 报名列表</a></li>
+                {if($correct == 1)}
+                <li><a class="" href="{:url('index/correct/correct')}"><i class="fa fa-qrcode"></i> 审阅作品</a></li>
+                {/if}
             </ul>
         </div>
     </nav>
@@ -74,68 +77,182 @@
 
     <div id="page-wrapper">
         <div class="header">
-            <h1 class="page-header">作品审阅<small>Welcome {$Request.session.user_name}</small></h1>
+            <h1 class="page-header">"{$competition.title}"社会实践报名列表<small>Welcome {$Request.session.user_name}</small></h1>
             <ol class="breadcrumb">
-                <li class="active"> 待审阅作品</li>
+                <li class="active"> 报名列表</li>
             </ol>
         </div>
         <div id="page-inner">
 
             <div class="row">
                 <div class="col-md-12">
-                    <a href="{:url('index/correct/signexvel')}"><button type="button" class="btn btn-info" style="width: 20%;">报名汇总excel</button></a>
-                    {if($size == 0)}
-                    <a href="{:url('index/correct/createxvel')}"><button type="button" class="btn btn-info" style="width: 20%;">评分汇总excel</button></a>
-                    {/if}
+                    <a href="{:url('index/correct/signexvel')}"><button type="button" class="btn btn-info" style="width: 20%;">"{$competition.title}"社会实践报名汇总excel</button></a>
                     <div class="panel panel-default">
-                        <div class="panel-heading" style="min-height: 0">待审阅作品列表 </div>
+                        <div class="panel-heading" style="min-height: 0">报名列表 </div>
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th style="width: 10%">竞赛名称</th>
-                                        <th style="width: 10%">竞赛大类</th>
-                                        <th style="width: 10%">竞赛组别</th>
-                                        <th style="width: 10%">竞赛作品(文件数字后为原文件名)</th>
-                                        <th style="width: 10%">作品评分</th>
+                                        <th style="width: 10%">大类</th>
+                                        <th style="width: 10%">组别</th>
+                                        <th style="width: 10%">题目</th>
+                                        <th style="width: 10%">任课老师</th>
+                                        <th style="width: 10%">辅导老师</th>
+                                        <th style="width: 10%">队长姓名</th>
+                                        <th style="width: 10%">队长联系方式</th>
+                                        <th style="width: 18%">操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {volist name="list" id="list" }
-
                                     <tr style="min-height: 51px;">
-                                        <td style="width: 10%">{$list.competition.title}</td>
-                                        <td style="width: 10%">
-                                            {$list.title.type.title}
-                                        </td>
-                                        <td style="width: 10%">
-                                            {$list.title.title}
-                                        </td>
-                                        <td style="width: 10%">
-                                            <a href="/uploads/{$list.file}">{$list.file}</a>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{$list.id}" style="margin-bottom: 20px;">
-                                                作品评分
+                                        <td style="width: 10%">{$list.title.type.title}</td>
+                                        <td style="width: 10%">{$list.title.title}</td>
+                                        <td style="width: 10%">{$list.sign_title}</td>
+                                        <td style="width: 10%">{$list.sign_teacher_renke}</td>
+                                        <td style="width: 10%">{$list.sign_teacher}</td>
+                                        <td style="width: 10%">{$list.name}</td>
+                                        <td style="width: 10%">{$list.phone}</td>
+                                        <td style="width: 18%">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#info{$list.id}" style="margin-bottom: 20px;">
+                                                查看完整信息
                                             </button>
-                                            <div class="modal fade" id="{$list.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="info{$list.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                            <h4 class="modal-title" id="myModalLabe2">作品评分</h4>
+                                                            <h4 class="modal-title" id="myModalLabe2">完整信息</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                <div class="panel panel-default">
+                                                                    <div class="panel-heading" style="min-height: 0">社会实践信息</div>
+                                                                    <div class="panel-body">
+                                                                        <div class="table-responsive">
+                                                                            <table class="table table-striped table-bordered table-hover">
+                                                                                <tbody>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%"><h4>社会实践信息</h4></th>
+                                                                                    <td style="width: 80%;"></td>
+                                                                                </tr>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">课程</th>
+                                                                                    <td style="width: 80%;">{$list.competition.title}</td>
+                                                                                </tr>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">社会实践组别</th>
+                                                                                    <td style="width: 80%;">{$list.title.title} 所属大类:{$list.title.type.title}</td>
+                                                                                </tr>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">社会实践题目</th>
+                                                                                    <td style="width: 80%;">
+                                                                                        {if($list.sign_title == null)}无{/if}
+                                                                                        {if($list.sign_title != null)}{$list.sign_title}{/if}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">任课老师</th>
+                                                                                    <td style="width: 80%;">{$list.sign_teacher_renke}</td>
+                                                                                </tr>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">指导老师</th>
+                                                                                    <td style="width: 80%;">
+                                                                                        {if($list.sign_teacher == null)}无{/if}
+                                                                                        {if($list.sign_teacher != null)}{$list.sign_teacher}{/if}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                {if($list.title_pingyu != null)}
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">选题评语</th>
+                                                                                    <td style="width: 80%;">
+                                                                                        {$list.title_pingyu}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                {/if}
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%"><h4>个人(队长)信息</h4></th>
+                                                                                    <td style="width: 80%;"></td>
+                                                                                </tr>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">姓名</th>
+                                                                                    <td style="width: 80%;">{$list.name}</td>
+                                                                                </tr>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">学号</th>
+                                                                                    <td style="width: 80%;">{$list.code}</td>
+                                                                                </tr>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">班级</th>
+                                                                                    <td style="width: 80%;">{$list.class}</td>
+                                                                                </tr>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">年级</th>
+                                                                                    <td style="width: 80%;">{$list.grade}</td>
+                                                                                </tr>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">学院</th>
+                                                                                    <td style="width: 80%;">{$list.collage}</td>
+                                                                                </tr>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">联系方式</th>
+                                                                                    <td style="width: 80%;">{$list.phone}</td>
+                                                                                </tr>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">邮箱</th>
+                                                                                    <td style="width: 80%;">{$list.email}</td>
+                                                                                </tr>
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%"><h4>队伍信息</h4></th>
+                                                                                    <td style="width: 80%;"></td>
+                                                                                </tr>
+                                                                                {volist name="list->members" id="member" }
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">队员{$member.number}信息</th>
+                                                                                    <td style="width: 80%;">
+                                                                                        姓名：{$member.name}，学号：{$member.code}，联系方式：{$member.phone}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                {/volist}
+                                                                                <tr style="min-height: 51px;">
+                                                                                    <th style="width: 20%">是否已提交作品</th>
+                                                                                    <td style="width: 80%;">
+                                                                                        {if($list.file == null)}否{/if}
+                                                                                        {if($list.file != null)}是{/if}
+                                                                                    </td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pingyu{$list.id}" style="margin-bottom: 20px;">
+                                                选题评语
+                                            </button>
+                                            <div class="modal fade" id="pingyu{$list.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                                            <h4 class="modal-title" id="myModalLabe2">选题评语</h4>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="row">
                                                                 <div class="col-md-8 col-md-offset-2">
-                                                                    <form role="form" method="post" enctype="multipart/form-data" action="{:url('index/correct/setpoint',['id'=>$list['id']])}">
+                                                                    <form role="form" method="post" enctype="multipart/form-data" action="{:url('index/correct/title_pingyu',['id'=>$list['id']])}">
                                                                         <div class="form-group">
-                                                                            <label>作品分数</label><small style="color: red"> *百分制，满分100，不允许小数</small>
-                                                                            <input type="text" name="point" value="" class="form-control" maxlength="28">
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label>作品评语</label><small style=""> 本评语只会对报名者显示，最多300字</small>
+                                                                            <label>评语</label><small style=""> 本评语只会对报名者显示，最多300字</small>
                                                                             <textarea class="form-control" rows="3"  name="pingyu" maxlength="300"></textarea>
                                                                         </div>
                                                                         <label></label>
@@ -153,8 +270,8 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    {/volist}
                                     </tbody>
+                                    {/volist}
                                 </table>
                                 {$page}
                             </div>

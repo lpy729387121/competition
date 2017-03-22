@@ -4,6 +4,7 @@ namespace app\index\controller;
 use think\Controller;
 use think\Cookie;
 use think\Db;
+use think\helper\Str;
 use think\Session;
 use think\Route;
 use think\Image;
@@ -55,7 +56,51 @@ class Correct extends Controller
         return $this->redirect('index/correct/home');
     }
 
-    public function home()
+    public function home() {
+        Session::start();
+        $user = $this->judge();
+        if($user->teacher == 0) {
+            return $this->redirect('index/correct/index');
+        }
+        $competition = CompetitionModel::where('status',1)->find();
+        if($competition == null) {
+            return $this->suces('当前暂无竞赛','logout');
+        }
+        $start_time = $competition->start_time;
+        $end_time = $competition->end_time;
+        $commit_time = $competition->commit_time;
+        $correct_time = $competition->correct_time;
+        $current_time = date('Y-m-d H:i:s');
+        if($current_time > $commit_time) {
+            $this->assign('correct',1);
+        } else {
+            $this->assign('correct',0);
+        }
+        $list = SignModel::where('competition_id',$competition->id)->paginate();
+        $this->assign('competition',$competition);
+        $this->assign('list',$list);
+        $this->assign('page',$list->render());
+        return $this->fetch('correct/home');
+    }
+
+    public function title_pingyu($id) {
+        Session::start();
+        $user = $this->judge();
+        if($user->teacher == 0) {
+            return $this->redirect('index/correct/index');
+        }
+        $competition = CompetitionModel::where('status',1)->find();
+        if($competition == null) {
+            return $this->suces('当前暂无竞赛','logout');
+        }
+        $pingyu = input('post.pingyu');
+        $sign = SignModel::get($id);
+        $sign->title_pingyu = $pingyu;
+        $sign->save();
+        return $this->suces('评语成功');
+    }
+
+    public function correct()
     {
         Session::start();
         $user = $this->judge();
@@ -71,17 +116,17 @@ class Correct extends Controller
         $commit_time = $competition->commit_time;
         $correct_time = $competition->correct_time;
         $current_time = date('Y-m-d H:i:s');
-        if($current_time < $commit_time) {
-            return $this->suces('作品上传还未截止','logout');
-        } else if($current_time > $correct_time) {
-            return $this->suces('作品审阅已经完成','logout');
+        if($current_time > $commit_time) {
+        } else {
+            return $this->suces('未到评分时间');
         }
-        $list = SignModel::where('file','>','')->where('competition_id',$competition->id)->where('point',null)->paginate(10);
+        $list = SignModel::where('file','>','')->where('competition_id',$competition->id)->paginate(50);
         $size = SignModel::where('file','>','')->where('competition_id',$competition->id)->where('point',null)->count();
+        $this->assign('competition',$competition);
         $this->assign('size',$size);
         $this->assign('list',$list);
         $this->assign('page',$list->render());
-        return $this->fetch('correct/home');
+        return $this->fetch('correct/correct');
     }
 
     public function setpoint($id) {
@@ -100,9 +145,9 @@ class Correct extends Controller
         $correct_time = $competition->correct_time;
         $current_time = date('Y-m-d H:i:s');
         if($current_time < $commit_time) {
-            return $this->suces('作品上传还未截止','logout');
-        } else if($current_time > $correct_time) {
-            return $this->suces('作品审阅已经完成','logout');
+            return $this->suces('未到评分时间');
+        } else if ($current_time > $correct_time){
+            return $this->suces('评分时间已过');
         }
         $sign = SignModel::get($id);
         $point = input('post.point');
@@ -140,35 +185,31 @@ class Correct extends Controller
         $commit_time = $competition->commit_time;
         $correct_time = $competition->correct_time;
         $current_time = date('Y-m-d H:i:s');
-        if($current_time < $commit_time) {
-            return $this->suces('作品上传还未截止','logout');
-        } else if($current_time > $correct_time) {
-            return $this->suces('作品审阅已经完成','logout');
-        }
         $array = SignModel::where('competition_id',$competition->id)->paginate();
         vendor('PHPExcel.PHPExcel');
         $objPHPExcel = new \PHPExcel();
 
         $objPHPExcel->getProperties()->setCreator('卢鹏宇')
-            ->setTitle('竞赛评分汇总');
+            ->setTitle('报名信息汇总');
 
         $write = new \PHPExcel_Writer_Excel5($objPHPExcel);
 
         $objPHPExcel->setActiveSheetIndex(0);
-        $objPHPExcel->getActiveSheet()->setTitle('评分信息');
+        $objPHPExcel->getActiveSheet()->setTitle('报名信息');
 
-        $objPHPExcel->getActiveSheet()->setCellValue('A1', '竞赛大类');
-        $objPHPExcel->getActiveSheet()->setCellValue('B1', '竞赛组别');
-        $objPHPExcel->getActiveSheet()->setCellValue('C1', '参赛队伍');
-        $objPHPExcel->getActiveSheet()->setCellValue('D1', '参赛题目');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', '大类');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', '组别');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', '社会实践题目');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', '任课老师');
         $objPHPExcel->getActiveSheet()->setCellValue('E1', '指导老师');
         $objPHPExcel->getActiveSheet()->setCellValue('F1', '队长姓名');
-        $objPHPExcel->getActiveSheet()->setCellValue('G1', '队长学院');
-        $objPHPExcel->getActiveSheet()->setCellValue('H1', '队长年级');
-        $objPHPExcel->getActiveSheet()->setCellValue('I1', '队长学号');
-        $objPHPExcel->getActiveSheet()->setCellValue('J1', '队长联系方式');
-        $objPHPExcel->getActiveSheet()->setCellValue('K1', '队长邮箱');
-        $objPHPExcel->getActiveSheet()->setCellValue('L1', '队员信息');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', '队长学号');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', '队长班级');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', '队长年级');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', '队长学院');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', '队长联系方式');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', '队长邮箱');
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', '队员信息');
 
         for($i=0,$cnt = sizeof($array);$i<$cnt;$i++) {
             $item = $array[$i];
@@ -177,44 +218,52 @@ class Correct extends Controller
             $objPHPExcel->getActiveSheet()->getStyle('A'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$sum,  $item->title->title);
             $objPHPExcel->getActiveSheet()->getStyle('B'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$sum,  $item->sign_name);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$sum,  $item->sign_title);
             $objPHPExcel->getActiveSheet()->getStyle('C'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$sum,  $item->sign_title);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$sum,  $item->sign_teacher_renke);
             $objPHPExcel->getActiveSheet()->getStyle('D'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
             $objPHPExcel->getActiveSheet()->setCellValue('E'.$sum,  $item->sign_teacher);
             $objPHPExcel->getActiveSheet()->getStyle('E'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
             $objPHPExcel->getActiveSheet()->setCellValue('F'.$sum,  $item->name);
             $objPHPExcel->getActiveSheet()->getStyle('F'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$sum,  $item->collage);
+            $objPHPExcel->getActiveSheet()->setCellValue('G'.$sum,  $item->code);
             $objPHPExcel->getActiveSheet()->getStyle('G'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$sum,  $item->grade);
+            $objPHPExcel->getActiveSheet()->setCellValue('H'.$sum,  $item->class);
             $objPHPExcel->getActiveSheet()->getStyle('H'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$sum,  $item->code);
+            $objPHPExcel->getActiveSheet()->setCellValue('I'.$sum,  $item->grade);
             $objPHPExcel->getActiveSheet()->getStyle('I'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$sum,  $item->phone);
+            $objPHPExcel->getActiveSheet()->setCellValue('J'.$sum,  $item->collage);
             $objPHPExcel->getActiveSheet()->getStyle('J'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$sum,  $item->email);
+            $objPHPExcel->getActiveSheet()->setCellValue('K'.$sum,  $item->phone);
             $objPHPExcel->getActiveSheet()->getStyle('K'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $members = $item->members;
-            $String = "";
-            for($j=0,$cnt_members = sizeof($members);$j < $cnt_members; $j++) {
-                $String += $members[$j]->info."\n";
-            }
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$sum,  $String);
+            $objPHPExcel->getActiveSheet()->setCellValue('L'.$sum,  $item->email);
             $objPHPExcel->getActiveSheet()->getStyle('L'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+            $members = $item->members;
+            $String = '';
+            for($j=0,$cnt_members = sizeof($members);$j < $cnt_members; $j++) {
+                if($j != $cnt_members-1) {
+                    $String = $String."姓名：".$members[$j]->name." 学号：".$members[$j]->code." 联系方式：".$members[$j]->phone."\n";
+                } else {
+                    $String = $String."姓名：".$members[$j]->name." 学号：".$members[$j]->code." 联系方式：".$members[$j]->phone;
+                }
+            }
+            $objPHPExcel->getActiveSheet()->setCellValue('M'.$sum,  $String);
+            $objPHPExcel->getActiveSheet()->getStyle('M'.$sum)->getAlignment()->setWrapText(true);
+            $objPHPExcel->getActiveSheet()->getStyle('M'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         }
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(60);
 
         ob_end_clean();
         header("Pragma: public");
@@ -224,7 +273,7 @@ class Correct extends Controller
         header("Content-Type:application/vnd.ms-execl");
         header("Content-Type:application/octet-stream");
         header("Content-Type:application/download");
-        header('Content-Disposition:attachment;filename="'.$competition->title.'报名汇总.xls"');
+        header('Content-Disposition:attachment;filename="'.$competition->title.'社会实践报名汇总.xls"');
         header("Content-Transfer-Encoding:binary");
         $write->save('php://output');
     }
@@ -244,33 +293,30 @@ class Correct extends Controller
         $commit_time = $competition->commit_time;
         $correct_time = $competition->correct_time;
         $current_time = date('Y-m-d H:i:s');
-        if($current_time < $commit_time) {
-            return $this->suces('作品上传还未截止','logout');
-        } else if($current_time > $correct_time) {
-            return $this->suces('作品审阅已经完成','logout');
-        }
-        $array = SignModel::where('competition_id',$competition->id)->where('point','>=',0)->order('point','desc')->paginate();
+        $array = SignModel::where('competition_id',$competition->id)->order('point','desc')->paginate();
         vendor('PHPExcel.PHPExcel');
         $objPHPExcel = new \PHPExcel();
 
         $objPHPExcel->getProperties()->setCreator('卢鹏宇')
-            ->setTitle('竞赛评分汇总');
+            ->setTitle('评分汇总');
 
         $write = new \PHPExcel_Writer_Excel5($objPHPExcel);
 
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setTitle('评分信息');
 
-        $objPHPExcel->getActiveSheet()->setCellValue('A1', '竞赛大类');
-        $objPHPExcel->getActiveSheet()->setCellValue('B1', '竞赛组别');
-        $objPHPExcel->getActiveSheet()->setCellValue('C1', '参赛队伍');
-        $objPHPExcel->getActiveSheet()->setCellValue('D1', '参赛题目');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', '大类');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', '组别');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', '社会实践题目');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', '任课老师');
         $objPHPExcel->getActiveSheet()->setCellValue('E1', '指导老师');
         $objPHPExcel->getActiveSheet()->setCellValue('F1', '队长姓名');
-        $objPHPExcel->getActiveSheet()->setCellValue('G1', '队长学院');
-        $objPHPExcel->getActiveSheet()->setCellValue('H1', '队长年级');
-        $objPHPExcel->getActiveSheet()->setCellValue('I1', '队员信息');
-        $objPHPExcel->getActiveSheet()->setCellValue('J1', '评分');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', '队长学号');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', '队长班级');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', '队长学院');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', '队长年级');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', '队员信息');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', '评分');
 
         for($i=0,$cnt = sizeof($array);$i<$cnt;$i++) {
             $item = $array[$i];
@@ -279,38 +325,55 @@ class Correct extends Controller
             $objPHPExcel->getActiveSheet()->getStyle('A'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$sum,  $item->title->title);
             $objPHPExcel->getActiveSheet()->getStyle('B'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$sum,  $item->sign_name);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$sum,  $item->sign_title);
             $objPHPExcel->getActiveSheet()->getStyle('C'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$sum,  $item->sign_title);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$sum,  $item->sign_teacher_renke);
             $objPHPExcel->getActiveSheet()->getStyle('D'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
             $objPHPExcel->getActiveSheet()->setCellValue('E'.$sum,  $item->sign_teacher);
             $objPHPExcel->getActiveSheet()->getStyle('E'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
             $objPHPExcel->getActiveSheet()->setCellValue('F'.$sum,  $item->name);
             $objPHPExcel->getActiveSheet()->getStyle('F'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$sum,  $item->collage);
+            $objPHPExcel->getActiveSheet()->setCellValue('G'.$sum,  $item->code);
             $objPHPExcel->getActiveSheet()->getStyle('G'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$sum,  $item->grade);
+            $objPHPExcel->getActiveSheet()->setCellValue('H'.$sum,  $item->class);
             $objPHPExcel->getActiveSheet()->getStyle('H'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+            $objPHPExcel->getActiveSheet()->setCellValue('I'.$sum,  $item->collage);
+            $objPHPExcel->getActiveSheet()->getStyle('I'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+            $objPHPExcel->getActiveSheet()->setCellValue('J'.$sum,  $item->grade);
+            $objPHPExcel->getActiveSheet()->getStyle('J'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
             $members = $item->members;
             $String = "";
             for($j=0,$cnt_members = sizeof($members);$j < $cnt_members; $j++) {
-                $String += $members[$j]->info."\n";
+                if($j != $cnt_members-1) {
+                    $String = $String."姓名：".$members[$j]->name." 学号：".$members[$j]->code." 联系方式：".$members[$j]->phone."\n";
+                } else {
+                    $String = $String."姓名：".$members[$j]->name." 学号：".$members[$j]->code." 联系方式：".$members[$j]->phone;
+                }
             }
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$sum,  $String);
-            $objPHPExcel->getActiveSheet()->getStyle('I'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$sum,  $item->point);
-            $objPHPExcel->getActiveSheet()->getStyle('J'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+            $objPHPExcel->getActiveSheet()->setCellValue('K'.$sum,  $String);
+            $objPHPExcel->getActiveSheet()->getStyle('K'.$sum)->getAlignment()->setWrapText(true);
+            $objPHPExcel->getActiveSheet()->getStyle('K'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+            if($item->file == null) {
+                $objPHPExcel->getActiveSheet()->setCellValue('L'.$sum,  '未提交作品');
+            } else if($item->point == null) {
+                $objPHPExcel->getActiveSheet()->setCellValue('L'.$sum,  '未评分');
+            } else {
+                $objPHPExcel->getActiveSheet()->setCellValue('L'.$sum,  $item->point);
+            }
+            $objPHPExcel->getActiveSheet()->getStyle('L'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         }
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
 
         ob_end_clean();
         header("Pragma: public");
@@ -320,7 +383,7 @@ class Correct extends Controller
         header("Content-Type:application/vnd.ms-execl");
         header("Content-Type:application/octet-stream");
         header("Content-Type:application/download");
-        header('Content-Disposition:attachment;filename="'.$competition->title.'评分汇总.xls"');
+        header('Content-Disposition:attachment;filename="'.$competition->title.'社会实践评分汇总.xls"');
         header("Content-Transfer-Encoding:binary");
         $write->save('php://output');
     }

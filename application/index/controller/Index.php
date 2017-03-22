@@ -123,7 +123,7 @@ class Index extends Controller
             }
         }
         $this->assign('competition',$competition);
-        return $this->fetch('index/home');
+        return $this->fetch('index/new_home');
     }
 
     public function sign() {
@@ -161,7 +161,7 @@ class Index extends Controller
         $user = UserModel::get($user_id);
         $this->assign('user',$user);
         $this->assign('competition',$competition);
-        return $this->fetch('index/sign');
+        return $this->fetch('index/new_sign');
     }
 
     public function signforcompetition($id) {
@@ -191,31 +191,35 @@ class Index extends Controller
                 Session::pause();
                 return $this->redirect('index/index/commit');
             } else {
+                Session::pause();
                 return $this->redirect('index/index/competitionresult');
             }
         }
-        $code = input('post.code');
         $name = input('post.name');
-        $collage = input('post.collage');
-        $type = input('post.type');
+        $code = input('post.code');
+        $class = input('post.class');
         $grade = input('post.grade');
+        $collage = input('post.collage');
         $phone = input('post.phone');
         $email = input('post.email');
         $title_id = input('post.title');
         $sign_title = input('post.sign_title');
+        $sign_teacher_renke = input('post.sign_teacher_renke');
         $sign_teacher = input('post.sign_teacher');
-        $sign_name = input('post.sign_name');
-        if($code == null) {
-            return $this->suces('学号不能为空');
-        }
         if($name == null) {
             return $this->suces('姓名不能为空');
         }
+        if($code == null) {
+            return $this->suces('学号不能为空');
+        }
+        if($class == null) {
+            return $this->suces('班级不能为空');
+        }
+        if($grade == null) {
+            return $this->suces('年级不能为空');
+        }
         if($collage == null) {
             return $this->suces('学院不能为空');
-        }
-        if($type == null) {
-            return $this->suces('类别不能为空');
         }
         if($phone == null) {
             return $this->suces('联系方式不能为空');
@@ -224,32 +228,47 @@ class Index extends Controller
             return $this->suces('邮件不能为空');
         }
         if($title_id == null) {
-            return $this->suces('请选择竞赛组别');
+            return $this->suces('请选择社会实践组别');
+        }
+        if($sign_title == null) {
+            return $this->suces('社会实践题目不能为空');
+        }
+        if($sign_teacher_renke == null) {
+            return $this->suces('任课老师不能为空');
+        }
+        if($sign_teacher == null) {
+            return $this->suces('指导老师不能为空');
         }
         $sign = new SignModel();
-        $sign->code = $code;
         $sign->name = $name;
+        $sign->code = $code;
+        $sign->class = $class;
         $sign->competition_id = $competition->id;
         $sign->user_id = $id;
-        $sign->collage = $collage;
-        $sign->type = $type;
         $sign->grade = $grade;
+        $sign->collage = $collage;
         $sign->phone = $phone;
         $sign->email = $email;
         $sign->title_id = $title_id;
         $sign->sign_title = $sign_title;
+        $sign->sign_teacher_renke = $sign_teacher_renke;
         $sign->sign_teacher = $sign_teacher;
-        $sign->sign_name = $sign_name;
         $sign->save();
         for($i = 1; $i < $competition->number;$i++) {
             $mid = $i;
-            $name = 'post.sign_friend'.$mid;
-            $info = input($name);
-            if($info != null) {
+            $name = 'post.sign_friend_name'.$mid;
+            $code = 'post.sign_friend_code'.$mid;
+            $phone = 'post.sign_friend_phone'.$mid;
+            $friend_name = input($name);
+            $friend_code = input($code);
+            $frienf_phone = input($phone);
+            if($friend_code != null || $friend_name != null || $frienf_phone != null) {
                 $member = new MemberModel();
                 $member->sign_id = $sign->id;
                 $member->number = $mid;
-                $member->info = $info;
+                $member->name = $friend_name;
+                $member->code = $friend_code;
+                $member->phone = $frienf_phone;
                 $member->save();
             }
         }
@@ -278,6 +297,9 @@ class Index extends Controller
                 return $this->suces('报名还未开始，请在'.$start_time.'后再登录系统','logout');
             } else if($current_time > $end_time) {
                 return $this->suces('报名已经截止，您之前并没有报名，无法进入系统','logout');
+            } else {
+                Session::pause();
+                return $this->redirect('index/index/home');
             }
         } else {
             if($current_time < $end_time) {
@@ -326,6 +348,9 @@ class Index extends Controller
                 return $this->suces('报名还未开始，请在'.$start_time.'后再登录系统','logout');
             } else if($current_time > $end_time) {
                 return $this->suces('报名已经截止，您之前并没有报名，无法进入系统','logout');
+            } else {
+                Session::pause();
+                return $this->redirect('index/index/home');
             }
         } else {
             if($current_time < $correct_time) {
@@ -359,6 +384,9 @@ class Index extends Controller
                 return $this->suces('报名还未开始，请在'.$start_time.'后再登录系统','logout');
             } else if($current_time > $end_time) {
                 return $this->suces('报名已经截止，您之前并没有报名，无法进入系统','logout');
+            } else {
+                Session::pause();
+                return $this->redirect('index/index/home');
             }
         } else {
             if($current_time > $commit_time) {
@@ -369,7 +397,7 @@ class Index extends Controller
         if($file == null) {
             return $this->suces('文件未选择或超过限制大小');
         }
-        $style = $file->validate(['ext' => 'rar,zip'])->move(ROOT_PATH . 'public' . DS . 'uploads',$user_sign->id.$file->getInfo()['name']);
+        $style = $file->validate(['ext' => 'rar,zip'])->move(ROOT_PATH . 'public' . DS . 'uploads',$user_sign->id.md5($file->getInfo()['name']));
         if($style == null) {
             return $this->suces('只支持.zip, .rar文件');
         }
@@ -405,6 +433,9 @@ class Index extends Controller
                 return $this->suces('报名还未开始，请在'.$start_time.'后再登录系统','logout');
             } else if($current_time > $end_time) {
                 return $this->suces('报名已经截止，您之前并没有报名，无法进入系统','logout');
+            } else {
+                Session::pause();
+                return $this->redirect('index/index/home');
             }
         } else {
             if($current_time > $end_time) {
@@ -413,7 +444,7 @@ class Index extends Controller
         }
         $this->assign('sign',$user_sign);
         $this->assign('size',sizeof($user_sign->members));
-        return $this->fetch('index/updatesign');
+        return $this->fetch('index/new_updatesign');
     }
 
     public function update($id) {
@@ -438,6 +469,9 @@ class Index extends Controller
                 return $this->suces('报名还未开始，请在'.$start_time.'后再登录系统','logout');
             } else if($current_time > $end_time) {
                 return $this->suces('报名已经截止，您之前并没有报名，无法进入系统','logout');
+            } else {
+                Session::pause();
+                return $this->redirect('index/index/home');
             }
         } else {
             if($current_time > $end_time) {
@@ -445,28 +479,31 @@ class Index extends Controller
             }
         }
         $sign = SignModel::get($id);
-        $code = input('post.code');
         $name = input('post.name');
-        $collage = input('post.collage');
-        $type = input('post.type');
+        $code = input('post.code');
+        $class = input('post.class');
         $grade = input('post.grade');
+        $collage = input('post.collage');
         $phone = input('post.phone');
         $email = input('post.email');
         $title_id = input('post.title');
         $sign_title = input('post.sign_title');
+        $sign_teacher_renke = input('post.sign_teacher_renke');
         $sign_teacher = input('post.sign_teacher');
-        $sign_name = input('post.sign_name');
-        if($code == null) {
-            return $this->suces('学号不能为空');
-        }
         if($name == null) {
             return $this->suces('姓名不能为空');
         }
+        if($code == null) {
+            return $this->suces('学号不能为空');
+        }
+        if($class == null) {
+            return $this->suces('班级不能为空');
+        }
+        if($grade == null) {
+            return $this->suces('年级不能为空');
+        }
         if($collage == null) {
             return $this->suces('学院不能为空');
-        }
-        if($type == null) {
-            return $this->suces('类别不能为空');
         }
         if($phone == null) {
             return $this->suces('联系方式不能为空');
@@ -475,37 +512,54 @@ class Index extends Controller
             return $this->suces('邮件不能为空');
         }
         if($title_id == null) {
-            return $this->suces('请选择竞赛组别');
+            return $this->suces('请选择社会实践组别');
         }
-        $sign->code = $code;
+        if($sign_title == null) {
+            return $this->suces('社会实践题目不能为空');
+        }
+        if($sign_teacher_renke == null) {
+            return $this->suces('任课老师不能为空');
+        }
+        if($sign_teacher == null) {
+            return $this->suces('指导老师不能为空');
+        }
         $sign->name = $name;
+        $sign->code = $code;
+        $sign->class = $class;
         $sign->competition_id = $competition->id;
         $sign->user_id = $id;
-        $sign->collage = $collage;
-        $sign->type = $type;
         $sign->grade = $grade;
+        $sign->collage = $collage;
         $sign->phone = $phone;
         $sign->email = $email;
         $sign->title_id = $title_id;
         $sign->sign_title = $sign_title;
+        $sign->sign_teacher_renke = $sign_teacher_renke;
         $sign->sign_teacher = $sign_teacher;
-        $sign->sign_name = $sign_name;
         $sign->save();
         for($i = 1; $i < $competition->number;$i++) {
             $mid = $i;
-            $name = 'post.sign_friend'.$mid;
-            $info = input($name);
-            if($info != null) {
+            $name = 'post.sign_friend_name'.$mid;
+            $code = 'post.sign_friend_code'.$mid;
+            $phone = 'post.sign_friend_phone'.$mid;
+            $friend_name = input($name);
+            $friend_code = input($code);
+            $frienf_phone = input($phone);
+            if($friend_code != null || $friend_name != null || $frienf_phone != null) {
                 $member = MemberModel::where('sign_id',$sign->id)->where('number',$mid)->find();
                 if($member == null) {
                     $member = new MemberModel();
                     $member->sign_id = $sign->id;
                     $member->number = $mid;
-                    $member->info = $info;
+                    $member->name = $friend_name;
+                    $member->code = $friend_code;
+                    $member->phone = $frienf_phone;
                     $member->save();
                 }
                 $member->number = $mid;
-                $member->info = $info;
+                $member->name = $friend_name;
+                $member->code = $friend_code;
+                $member->phone = $frienf_phone;
                 $member->save();
             } else {
                 $member = MemberModel::where('sign_id',$sign->id)->where('number',$mid)->find();
@@ -525,28 +579,30 @@ class Index extends Controller
 
     public function getexcel() {
         $competition = CompetitionModel::where('status',1)->find();
-        $array = SignModel::where('competition_id',$competition->id)->where('point','>=',0)->order('point','desc')->paginate();
+        $array = SignModel::where('competition_id',$competition->id)->order('point','desc')->paginate();
         vendor('PHPExcel.PHPExcel');
         $objPHPExcel = new \PHPExcel();
 
         $objPHPExcel->getProperties()->setCreator('卢鹏宇')
-            ->setTitle('竞赛评分汇总');
+            ->setTitle('评分汇总');
 
         $write = new \PHPExcel_Writer_Excel5($objPHPExcel);
 
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setTitle('评分信息');
 
-        $objPHPExcel->getActiveSheet()->setCellValue('A1', '竞赛大类');
-        $objPHPExcel->getActiveSheet()->setCellValue('B1', '竞赛组别');
-        $objPHPExcel->getActiveSheet()->setCellValue('C1', '参赛队伍');
-        $objPHPExcel->getActiveSheet()->setCellValue('D1', '参赛题目');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', '大类');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', '组别');
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', '社会实践题目');
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', '任课老师');
         $objPHPExcel->getActiveSheet()->setCellValue('E1', '指导老师');
         $objPHPExcel->getActiveSheet()->setCellValue('F1', '队长姓名');
-        $objPHPExcel->getActiveSheet()->setCellValue('G1', '队长学院');
-        $objPHPExcel->getActiveSheet()->setCellValue('H1', '队长年级');
-        $objPHPExcel->getActiveSheet()->setCellValue('I1', '队员信息');
-        $objPHPExcel->getActiveSheet()->setCellValue('J1', '评分');
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', '队长学号');
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', '队长班级');
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', '队长学院');
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', '队长年级');
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', '队员信息');
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', '评分');
 
         for($i=0,$cnt = sizeof($array);$i<$cnt;$i++) {
             $item = $array[$i];
@@ -555,38 +611,55 @@ class Index extends Controller
             $objPHPExcel->getActiveSheet()->getStyle('A'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$sum,  $item->title->title);
             $objPHPExcel->getActiveSheet()->getStyle('B'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$sum,  $item->sign_name);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$sum,  $item->sign_title);
             $objPHPExcel->getActiveSheet()->getStyle('C'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$sum,  $item->sign_title);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$sum,  $item->sign_teacher_renke);
             $objPHPExcel->getActiveSheet()->getStyle('D'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
             $objPHPExcel->getActiveSheet()->setCellValue('E'.$sum,  $item->sign_teacher);
             $objPHPExcel->getActiveSheet()->getStyle('E'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
             $objPHPExcel->getActiveSheet()->setCellValue('F'.$sum,  $item->name);
             $objPHPExcel->getActiveSheet()->getStyle('F'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$sum,  $item->collage);
+            $objPHPExcel->getActiveSheet()->setCellValue('G'.$sum,  $item->code);
             $objPHPExcel->getActiveSheet()->getStyle('G'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$sum,  $item->grade);
+            $objPHPExcel->getActiveSheet()->setCellValue('H'.$sum,  $item->class);
             $objPHPExcel->getActiveSheet()->getStyle('H'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+            $objPHPExcel->getActiveSheet()->setCellValue('I'.$sum,  $item->collage);
+            $objPHPExcel->getActiveSheet()->getStyle('I'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+            $objPHPExcel->getActiveSheet()->setCellValue('J'.$sum,  $item->grade);
+            $objPHPExcel->getActiveSheet()->getStyle('J'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
             $members = $item->members;
             $String = "";
             for($j=0,$cnt_members = sizeof($members);$j < $cnt_members; $j++) {
-                $String += $members[$j]->info."\n";
+                if($j != $cnt_members-1) {
+                    $String = $String."姓名：".$members[$j]->name." 学号：".$members[$j]->code." 联系方式：".$members[$j]->phone."\n";
+                } else {
+                    $String = $String."姓名：".$members[$j]->name." 学号：".$members[$j]->code." 联系方式：".$members[$j]->phone;
+                }
             }
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$sum,  $String);
-            $objPHPExcel->getActiveSheet()->getStyle('I'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$sum,  $item->point);
-            $objPHPExcel->getActiveSheet()->getStyle('J'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+            $objPHPExcel->getActiveSheet()->setCellValue('K'.$sum,  $String);
+            $objPHPExcel->getActiveSheet()->getStyle('K'.$sum)->getAlignment()->setWrapText(true);
+            $objPHPExcel->getActiveSheet()->getStyle('K'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+            if($item->file == null) {
+                $objPHPExcel->getActiveSheet()->setCellValue('L'.$sum,  '未提交作品');
+            } else if($item->point == null) {
+                $objPHPExcel->getActiveSheet()->setCellValue('L'.$sum,  '未评分');
+            } else {
+                $objPHPExcel->getActiveSheet()->setCellValue('L'.$sum,  $item->point);
+            }
+            $objPHPExcel->getActiveSheet()->getStyle('L'.$sum)->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         }
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(15);
         $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(40);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(40);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(20);
 
         ob_end_clean();
         header("Pragma: public");
@@ -596,7 +669,7 @@ class Index extends Controller
         header("Content-Type:application/vnd.ms-execl");
         header("Content-Type:application/octet-stream");
         header("Content-Type:application/download");
-        header('Content-Disposition:attachment;filename="'.$competition->title.'评分汇总.xls"');
+        header('Content-Disposition:attachment;filename="'.$competition->title.'社会实践评分汇总.xls"');
         header("Content-Transfer-Encoding:binary");
         $write->save('php://output');
     }

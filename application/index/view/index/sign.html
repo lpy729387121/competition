@@ -3,34 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <link href="/static/assets/css/bootstrap.css" rel="stylesheet" />
-    <title>竞赛报名</title>
+    <title>信息填写</title>
 </head>
 <body>
 <div class="container">
-<h1 style="text-align: center">"{$competition.title}"竞赛报名</h1>
+<h1 style="text-align: center">"{$competition.title}"社会实践信息填写</h1>
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <form role="form" method="post" enctype="multipart/form-data" action="{:url('index/index/signforcompetition',['id'=>$user['id']])}">
             <h3 style="text-align: center">队长个人信息</h3>
             <div class="form-group">
-                <label>学号</label><small style="color: red"> *</small>
-                <input type="text" name="code" value="" class="form-control" maxlength="28">
-            </div>
-            <div class="form-group">
                 <label>姓名</label><small style="color: red"> *</small>
                 <input type="text" name="name" value="" class="form-control" maxlength="28">
             </div>
             <div class="form-group">
-                <label>学院</label><small style="color: red"> *</small>
-                <input type="text" name="collage" value="" class="form-control" maxlength="28">
+                <label>学号</label><small style="color: red"> *</small>
+                <input type="text" name="code" value="" class="form-control" maxlength="28">
             </div>
             <div class="form-group">
-                <label>类别</label><small style="color: red"> *(本科生 研究生 博士生)</small>
-                <input type="text" name="type" value="" class="form-control" maxlength="28">
+                <label>班级</label><small style="color: red"> *</small>
+                <input type="text" name="class" value="" class="form-control" maxlength="28">
             </div>
             <div class="form-group">
                 <label>年级</label><small style="color: red"> *(例:2015级)</small>
                 <input type="text" name="grade" value="" class="form-control" maxlength="28">
+            </div>
+            <div class="form-group">
+                <label>学院</label><small style="color: red"> *</small>
+                <input type="text" name="collage" value="" class="form-control" maxlength="28">
             </div>
             <div class="form-group">
                 <label>联系方式</label><small style="color: red"> *</small>
@@ -40,13 +40,13 @@
                 <label>邮箱</label><small style="color: red"> *</small>
                 <input type="text" name="email" value="" class="form-control" maxlength="28">
             </div>
-            <h3 style="text-align: center">参赛信息</h3>
+            <h3 style="text-align: center">社会实践信息</h3>
             <div class="form-group">
-                <label>竞赛名称</label>
+                <label>课程名称</label>
                 <input type="text" name="competition_name" value="{$competition.title}" class="form-control" maxlength="28" disabled>
             </div>
             <div class="form-group">
-                <label>竞赛组别</label><small style="color: red"> *</small>
+                <label>社会实践组别</label><small style="color: red"> *</small>
                 <select class="form-control" name = "title">
                     <option value=""> </option>
                     {volist name="competition->types" id="type" }
@@ -57,31 +57,40 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>参赛题目</label><small style=""> (可空)</small>
+                <label>社会实践题目</label><small style="color: red"> *</small>
                 <input type="text" name="sign_title" value="" class="form-control" maxlength="28">
             </div>
             <div class="form-group">
-                <label>指导老师</label><small style=""> (可空)(学院+姓名)</small>
+                <label>任课老师</label><small style="color: red">*</small>
+                <input type="text" name="sign_teacher" value="" class="form-control" maxlength="28">
+            </div>
+            <div class="form-group">
+                <label>指导老师</label><small style="color: red">*可与任课老师相同</small>
                 <input type="text" name="sign_teacher" value="" class="form-control" maxlength="28">
             </div>
             <h3 style="text-align: center">队伍信息</h3>
-            <div class="form-group">
-                <label>队伍名称</label><small style=""> (可空)</small>
-                <input type="text" name="sign_name" value="" class="form-control" maxlength="28">
-            </div>
             {for start="1" end="$competition.number"}
+            <h4>队员{$i}<small style=""> (可空)</small></h4>
             <div class="form-group">
-                <label>队员{$i}</label><small style=""> (可空)(学号+姓名+联系方式)</small>
-                <input type="text" name="sign_friend{$i}" value="" class="form-control" maxlength="58">
+                <label>姓名</label>
+                <input type="text" name="sign_friend_name{$i}" value="" class="form-control" maxlength="58">
             </div>
+            <div class="form-group">
+                <label>学号</label>
+                <input type="text" name="sign_friend_code{$i}" value="" class="form-control" maxlength="58">
+            </div>
+            <div class="form-group">
+                <label>联系方式</label>
+                <input type="text" name="sign_friend_phone{$i}" value="" class="form-control" maxlength="58">
+            </div>
+            {/for}
             <div class="form-group">
                 <label>"注：项目团队报名只需要队长填写提交此报名表，个人报名只需填写个人信息"
                 </label>
             </div>
-            {/for}
             <label></label>
             <input type="hidden" name="__token__" value="{$Request.token}" />
-            <input type="submit" id="submit" class="btn btn-success" value=" 报名 " style="width: 100%">
+            <input type="submit" id="submit" class="btn btn-success" value=" 确定 " style="width: 100%">
             <label></label>
         </form>
     </div>

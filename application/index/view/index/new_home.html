@@ -1,0 +1,55 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>社会实践作品上传</title>
+
+    <link href="/static/assets/css/bootstrap.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/static/index/index/css/style.css">
+
+    <link rel="stylesheet" href="/static/index/index/css/iconfont.css">
+
+    <script src="/static/index/index/js/jquery.js"></script>
+
+</head>
+
+<body>
+
+    <div class="login-banner"></div>
+
+    <h1 style="text-align: center">"{$competition.title}"社会实践作品上传</h1>
+    <h3 style="text-align: center">社会实践说明</h3>
+    <p style="text-align: center">{$competition.body}</p>
+    <h3 style="text-align: center">社会实践大类</h3>
+    {volist name="competition->types" id="item" }
+    <p style="text-align: center">{$item.title}</p>
+    {/volist}
+    <h3 style="text-align: center">社会实践组别</h3>
+    {volist name="competition->types" id="type" }
+    {volist name="type->titles" id="title" }
+    <p style="text-align: center">{$title.title} 所属大类：{$type.title}</p>
+    {/volist}
+    {/volist}
+    <h3 style="text-align: center">注意事项</h3>
+    <p style="text-align: center">{$competition.warning}</p>
+    <h3 style="text-align: center">每组最多成员人数:{$competition.number}</h3>
+    <h3 style="text-align: center">报名开始时间:{$competition.start_time}</h3>
+    <h3 style="text-align: center">报名截止时间:{$competition.end_time}</h3>
+    <h3 style="text-align: center">作品提交截止时间:{$competition.commit_time}</h3>
+    <h3 style="text-align: center">评选截止结果公布时间:{$competition.correct_time}</h3>
+    <a href="{:url('index/index/sign')}"><button type="button" class="btn btn-success" style="width: 180px; margin-left: 38%; margin-bottom: 30px;">接受</button></a>
+    <a href="{:url('index/index/logout')}"><button type="button" class="btn btn-danger" style="width: 180px; margin-bottom: 30px;">拒绝</button></a>
+
+    <div class="login-footer">
+    </div>
+
+</body>
+
+</html>

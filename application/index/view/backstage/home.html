@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta content="" name="description" />
     <meta content="webthemez" name="author" />
-    <title>竞赛管理</title>
+    <title>社会实践管理</title>
     <!-- Bootstrap Styles-->
     <link href="/static/assets/css/bootstrap.css" rel="stylesheet" />
     <!-- FontAwesome Styles-->
@@ -74,9 +74,9 @@
 
     <div id="page-wrapper">
         <div class="header">
-            <h1 class="page-header">竞赛管理<small>Welcome {$Request.session.user_name}</small></h1>
+            <h1 class="page-header">社会实践管理<small>Welcome {$Request.session.user_name}</small></h1>
             <ol class="breadcrumb">
-                <li class="active"> 竞赛管理</li>
+                <li class="active"> 社会实践管理</li>
             </ol>
         </div>
         <div id="page-inner">
@@ -85,7 +85,7 @@
                 <div class="col-md-12">
 
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#0" style="margin-bottom: 20px;">
-                        发布竞赛
+                        发布社会实践
                     </button>
 
 
@@ -94,18 +94,18 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                    <h4 class="modal-title" id="myModalLabe2">发布竞赛</h4>
+                                    <h4 class="modal-title" id="myModalLabe2">发布社会实践</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-8 col-md-offset-2">
                                             <form role="form" method="post" enctype="multipart/form-data" action="{:url('index/backstage/addcompetition')}">
                                                 <div class="form-group">
-                                                    <label>竞赛名称</label><small style="color: red"> *最多28字</small>
+                                                    <label>课程名称</label><small style="color: red"> *最多28字</small>
                                                     <input type="text" name="title" value="{$Think.session.title}" class="form-control" maxlength="28">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>竞赛说明</label><small style="color: red"> *最多300字</small>
+                                                    <label>社会实践说明</label><small style="color: red"> *最多300字</small>
                                                     <textarea class="form-control" rows="3" value="{$Think.session.body}" name="body" maxlength="300"></textarea>
                                                 </div>
                                                 <div class="form-group">
@@ -113,20 +113,12 @@
                                                     <textarea class="form-control" rows="3"  name="warning" maxlength="300"></textarea>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>竞赛大类数目</label><small style="color: red"> *最多99个</small>
+                                                    <label>社会实践大类数目</label><small style="color: red"> *最多99个</small>
                                                     <input type="text" name="number_type" class="form-control" maxlength="8">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>竞赛题目总数</label><small style="color: red"> *最多99个</small>
+                                                    <label>社会实践题目总数</label><small style="color: red"> *最多99个</small>
                                                     <input type="text" name="number_title" class="form-control" maxlength="8">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>赛题说明</label><small style="color: red"> *最多300字</small>
-                                                    <textarea class="form-control" rows="3"  name="title_info" maxlength="300"></textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>其他说明</label><small style=""> 最多300字</small>
-                                                    <textarea class="form-control" rows="3"  name="other" maxlength="300"></textarea>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>每组最多报名人数</label><small style="color: red"> *每组最多报名人数应为大于等于1的整数</small>
@@ -174,17 +166,17 @@
                     </div>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading" style="min-height: 0">竞赛列表 </div>
+                        <div class="panel-heading" style="min-height: 0">社会实践列表 </div>
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th style="width: 10%">竞赛名称</th>
+                                        <th style="width: 10%">课程名称</th>
                                         <th style="width: 10%">大类状态</th>
                                         <th style="width: 10%">题目状态</th>
                                         <th style="width: 10%">报名人数</th>
-                                        <th style="width: 10%">是否为当前竞赛</th>
+                                        <th style="width: 10%">是否为当前社会实践</th>
                                         <th style="width: 15%">发布时间</th>
                                         <th style="width: 15%">操作</th>
                                     </tr>
@@ -223,14 +215,14 @@
                                         <td style="width: 15%">
                                             {if($list.type_status==0)}
                                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#{$list.id}" style="margin-bottom: 20px;">
-                                                设置竞赛大类
+                                                设置社会实践大类
                                             </button>
                                             <div class="modal fade" id="{$list.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                            <h4 class="modal-title" id="myModalLabe2">设置竞赛大类</h4>
+                                                            <h4 class="modal-title" id="myModalLabe2">设置社会实践大类</h4>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="row">
@@ -258,7 +250,7 @@
                                             {/if}
                                             {if($list.type_status==1)}
                                             {if($list.title_status==0)}
-                                            <a href="{:url('index/backstage/title',['id'=>$list['id']])}"><button type="button" class="btn btn-success">设置竞赛题目</button></a>
+                                            <a href="{:url('index/backstage/title',['id'=>$list['id']])}"><button type="button" class="btn btn-success">设置社会实践题目</button></a>
                                             <!--
                                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#timu{$list.id}" style="margin-bottom: 20px;">
                                                 设置竞赛题目
@@ -317,7 +309,7 @@
                                             {if($list.type_status==1)}
                                             {if($list.title_status==1)}
                                             {if($list.status==0)}
-                                            <a href="javascript:if(confirm('竞赛上线将会打断其他竞赛，确定么？'))location='{:url('index/backstage/setonline',['id'=>$list['id']])}'"><button type="button" class="btn btn-success">竞赛上线</button></a>
+                                            <a href="javascript:if(confirm('确定么？'))location='{:url('index/backstage/setonline',['id'=>$list['id']])}'"><button type="button" class="btn btn-success">社会实践上线</button></a>
                                             {/if}
                                             {/if}
                                             {/if}

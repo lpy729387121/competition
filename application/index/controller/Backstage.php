@@ -68,7 +68,6 @@ class Backstage extends Controller
         $title = input('post.title');
         $body = input('post.body');
         $warning = input('post.warning');
-        $other = input('post.other');
         $number = input('number');
         $number_type = input('post.number_type');
         $number_title = input('post.number_title');
@@ -129,7 +128,6 @@ class Backstage extends Controller
         $competition->title = $title;
         $competition->body = $body;
         $competition->warning = $warning;
-        $competition->other = $other;
         $competition->number = $number;
         $competition->number_type = $number_type;
         $competition->number_title = $number_title;

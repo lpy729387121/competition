@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="/static/assets/css/bootstrap.css" rel="stylesheet" />
+    <title>信息修改</title>
+</head>
+<body>
+<div class="container">
+    <h1 style="text-align: center">"{$sign.competition.title}"社会实践信息修改</h1>
+    <form role="form" method="post" enctype="multipart/form-data" action="{:url('index/index/update',['id'=>$sign['id']])}">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="min-height: 0">队长个人信息</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label>姓名</label><small style="color: red"> *</small>
+                            <input type="text" name="name" value="{$sign.name}" class="form-control" maxlength="28">
+                        </div>
+                        <div class="form-group">
+                            <label>学号</label><small style="color: red"> *</small>
+                            <input type="text" name="code" value="{$sign.code}" class="form-control" maxlength="28">
+                        </div>
+                        <div class="form-group">
+                            <label>班级</label><small style="color: red"> *</small>
+                            <input type="text" name="class" value="{$sign.class}" class="form-control" maxlength="28">
+                        </div>
+                        <div class="form-group">
+                            <label>年级</label><small style="color: red"> *(例:2015级)</small>
+                            <input type="text" name="grade" value="{$sign.grade}" class="form-control" maxlength="28">
+                        </div>
+                        <div class="form-group">
+                            <label>学院</label><small style="color: red"> *</small>
+                            <input type="text" name="collage" value="{$sign.collage}" class="form-control" maxlength="28">
+                        </div>
+                        <div class="form-group">
+                            <label>联系方式</label><small style="color: red"> *</small>
+                            <input type="text" name="phone" value="{$sign.phone}" class="form-control" maxlength="28">
+                        </div>
+                        <div class="form-group">
+                            <label>邮箱</label><small style="color: red"> *</small>
+                            <input type="text" name="email" value="{$sign.email}" class="form-control" maxlength="28">
+                        </div>
+                    </div>
+
+                    <div class="panel-heading" style="min-height: 0">社会实践信息</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label>课程名称</label>
+                            <input type="text" name="competition_name" value="{$sign.competition.title}" class="form-control" maxlength="28" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>社会实践组别</label><small style="color: red"> *</small>
+                            <select class="form-control" name = "title">
+                                <option value=""> </option>
+                                {volist name="sign.competition->types" id="type" }
+                                {volist name="type->titles" id="title" }
+                                <option value="{$title.id}"
+                                {if($title.id == $sign.title_id)}
+                                        selected{/if}
+                                >{$title.title} 所属大类：{$type.title}</option>
+                                {/volist}
+                                {/volist}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>社会实践题目</label><small style="color: red"> *</small>
+                            <input type="text" name="sign_title" value="{$sign.sign_title}" class="form-control" maxlength="28">
+                        </div>
+                        <div class="form-group">
+                            <label>任课老师</label><small style="color: red">*</small>
+                            <input type="text" name="sign_teacher_renke" value="{$sign.sign_teacher_renke}" class="form-control" maxlength="28">
+                        </div>
+                        <div class="form-group">
+                            <label>指导老师</label><small style="color: red">*可与任课老师相同</small>
+                            <input type="text" name="sign_teacher" value="{$sign.sign_teacher}" class="form-control" maxlength="28">
+                        </div>
+                    </div>
+
+                    <div class="panel-heading" style="min-height: 0">队伍信息</div>
+                    <div class="panel-body">
+                        {for start="1" end="$sign.competition.number"}
+                        <h4>队员{$i}<small style=""> (可空)</small></h4>
+                        <div class="form-group">
+                            <label>姓名</label>
+                            <input type="text" name="sign_friend_name{$i}" value="{if($i <= $size)}{$sign.members[$i-1]['name']}{/if}" class="form-control" maxlength="58">
+                        </div>
+                        <div class="form-group">
+                            <label>学号</label>
+                            <input type="text" name="sign_friend_code{$i}" value="{if($i <= $size)}{$sign.members[$i-1]['code']}{/if}" class="form-control" maxlength="58">
+                        </div>
+                        <div class="form-group">
+                            <label>联系方式</label>
+                            <input type="text" name="sign_friend_phone{$i}" value="{if($i <= $size)}{$sign.members[$i-1]['phone']}{/if}" class="form-control" maxlength="58">
+                        </div>
+                        {/for}
+                        <div class="form-group">
+                            <label>"注：项目团队报名只需要队长填写提交此报名表，个人报名只需填写个人信息"
+                            </label>
+                        </div>
+                        <label></label>
+                        <input type="hidden" name="__token__" value="{$Request.token}" />
+                        <input type="submit" id="submit" class="btn btn-success" value=" 确定 " style="width: 100%">
+                        <label></label>
+                    </div>
+                </div>
+            </div>
+    </form>
+</div>
+</body>
+</html>

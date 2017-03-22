@@ -12,6 +12,7 @@ Route::rule('backstage/settitle/:id','index/Backstage/settitle');
 Route::rule('backstage/title/:id','index/Backstage/title');
 Route::rule('backstage/setonline/:id','index/Backstage/setonline');
 Route::rule('correct/setpoint/:id','index/Correct/setpoint');
+Route::rule('correct/title_pingyu/:id','index/Correct/title_pingyu');
 
 return [
     '__pattern__' => [
@@ -41,6 +42,7 @@ return [
     'correct/login'=>'index/correct/login',
     'correct/logout'=>'index/correct/logout',
     'correct/home'=>'index/correct/home',
+    'correct/correct'=>'index/correct/correct',
     'correct/createxvel'=>'index/correct/createxvel',
     'correct/signexvel'=>'index/correct/signexvel',
 ];
