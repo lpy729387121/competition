@@ -36,6 +36,7 @@ return [
     'backstage'=>'index/backstage/index',
     'backstage/login'=>'index/backstage/login',
     'backstage/logout'=>'index/backstage/logout',
+
     'backstage/home'=>'index/backstage/home',
     'backstage/addcompetition'=>'index/backstage/addcompetition',
     'correct'=>'index/correct/index',
@@ -43,6 +44,8 @@ return [
     'correct/logout'=>'index/correct/logout',
     'correct/home'=>'index/correct/home',
     'correct/correct'=>'index/correct/correct',
+    'correct/goodsearch'=>'index/correct/goodsearch',
     'correct/createxvel'=>'index/correct/createxvel',
+    'correct/signsearch'=>'index/correct/signsearch',
     'correct/signexvel'=>'index/correct/signexvel',
 ];

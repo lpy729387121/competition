@@ -122,8 +122,9 @@ class Index extends Controller
                 return $this->redirect('index/index/competitionresult');
             }
         }
-        $this->assign('competition',$competition);
-        return $this->fetch('index/new_home');
+        //$this->assign('competition',$competition);
+        Session::pause();
+        return $this->redirect('index/index/sign');
     }
 
     public function sign() {
@@ -272,6 +273,8 @@ class Index extends Controller
                 $member->save();
             }
         }
+        $competition->sign = $competition->sign + 1;
+        $competition->save();
         return $this->suces('报名成功','home');
     }
 

@@ -66,8 +66,8 @@ class Backstage extends Controller
             return $this->redirect('index/backstage/index');
         }
         $title = input('post.title');
-        $body = input('post.body');
-        $warning = input('post.warning');
+        //$body = input('post.body');
+        //$warning = input('post.warning');
         $number = input('number');
         $number_type = input('post.number_type');
         $start_time = date("Y-m-d H:i:s",strtotime(input('post.start_time')));
@@ -76,12 +76,6 @@ class Backstage extends Controller
         $correct_time = date("Y-m-d H:i:s",strtotime(input('post.correct_time')));
         if($title == null) {
             return $this->suces('标题不能为空');
-        }
-        if($body == null) {
-            return $this->suces('描述不能为空');
-        }
-        if($warning == null) {
-            return $this->suces('注意事项不能为空');
         }
         if($number == null) {
             return $this->suces('每组最多报名人数不能为空');
@@ -118,8 +112,8 @@ class Backstage extends Controller
         }
         $competition = new CompetitionModel();
         $competition->title = $title;
-        $competition->body = $body;
-        $competition->warning = $warning;
+        //$competition->body = $body;
+        //$competition->warning = $warning;
         $competition->number = $number;
         $competition->number_type = $number_type;
         $competition->start_time = $start_time;

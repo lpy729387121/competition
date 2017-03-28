@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=10"> 
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta content="" name="description" />
     <meta content="webthemez" name="author" />
@@ -82,11 +84,42 @@
                 <li class="active"> 报名列表</li>
             </ol>
         </div>
-        <div id="page-inner">
+        <div id="page-inner" style="min-height:1000px;">
 
             <div class="row">
                 <div class="col-md-12">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#111" style="margin-bottom: 20px;">
+                        社会实践报名筛选
+                    </button><br/>
                     <a href="{:url('index/correct/signexvel')}"><button type="button" class="btn btn-info" style="width: 20%;">"{$competition.title}"社会实践报名汇总excel</button></a>
+
+                    <div class="modal fade" id="111" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <h4 class="modal-title" id="myModalLabe2">社会实践报名筛选</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-8 col-md-offset-2">
+                                            <form role="form" method="post" enctype="multipart/form-data" action="{:url('index/correct/signsearch')}">
+                                                <div class="form-group">
+                                                    <label>任课老师</label>
+                                                    <input type="text" name="teacher" value="{$Think.session.title}" class="form-control" maxlength="28">
+                                                </div>
+                                                <input type="hidden" name="__token__" value="{$Request.token}" />
+                                                <input type="submit" id="submit" class="btn btn-success" value=" 筛选 " style="width: 100%">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="panel panel-default">
                         <div class="panel-heading" style="min-height: 0">报名列表 </div>
                         <div class="panel-body">

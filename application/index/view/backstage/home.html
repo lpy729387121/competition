@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=10"> 
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta content="" name="description" />
     <meta content="webthemez" name="author" />
@@ -30,7 +32,7 @@
 </head>
 
 <body>
-<div id="wrapper">
+<div id="wrapper" >
     <nav class="navbar navbar-default top-navbar" role="navigation">
 
         <!-- 左边的header -->
@@ -79,7 +81,7 @@
                 <li class="active"> 社会实践管理</li>
             </ol>
         </div>
-        <div id="page-inner">
+        <div id="page-inner" style="min-height:1000px;">
 
             <div class="row">
                 <div class="col-md-12">
@@ -104,6 +106,7 @@
                                                     <label>课程名称</label><small style="color: red"> *最多28字</small>
                                                     <input type="text" name="title" value="{$Think.session.title}" class="form-control" maxlength="28">
                                                 </div>
+                                                <!--
                                                 <div class="form-group">
                                                     <label>社会实践说明</label><small style="color: red"> *最多300字</small>
                                                     <textarea class="form-control" rows="3" value="{$Think.session.body}" name="body" maxlength="300"></textarea>
@@ -112,6 +115,7 @@
                                                     <label>注意事项</label><small style="color: red"> *最多300字</small>
                                                     <textarea class="form-control" rows="3"  name="warning" maxlength="300"></textarea>
                                                 </div>
+                                                -->
                                                 <div class="form-group">
                                                     <label>社会实践方向数目</label><small style="color: red"> *最多99个</small>
                                                     <input type="text" name="number_type" class="form-control" maxlength="8">

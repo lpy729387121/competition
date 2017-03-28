@@ -57,6 +57,36 @@ class Correct extends Controller
         return $this->redirect('index/correct/home');
     }
 
+    public function signsearch()
+    {
+        Session::start();
+        $user = $this->judge();
+        if($user->teacher == 0) {
+            return $this->redirect('index/correct/index');
+        }
+        $competition = CompetitionModel::where('status',1)->find();
+        if($competition == null) {
+            return $this->suces('当前暂无竞赛','logout');
+        }
+        $teacher = input('post.teacher');
+        $start_time = $competition->start_time;
+        $end_time = $competition->end_time;
+        $commit_time = $competition->commit_time;
+        $correct_time = $competition->correct_time;
+        $current_time = date('Y-m-d H:i:s');
+        if($current_time > $commit_time) {
+            $this->assign('correct',1);
+        } else {
+            $this->assign('correct',0);
+        }
+        $list = SignModel::where('competition_id',$competition->id)->where('sign_teacher_renke','LIKE','%'.$teacher.'%')->paginate(30);
+        Session::set('sign_excel',SignModel::where('competition_id',$competition->id)->where('sign_teacher_renke','LIKE','%'.$teacher.'%')->paginate());
+        $this->assign('competition',$competition);
+        $this->assign('list',$list);
+        $this->assign('page',$list->render());
+        return $this->fetch('correct/home');
+    }
+
     public function home() {
         Session::start();
         $user = $this->judge();
@@ -77,7 +107,8 @@ class Correct extends Controller
         } else {
             $this->assign('correct',0);
         }
-        $list = SignModel::where('competition_id',$competition->id)->paginate();
+        $list = SignModel::where('competition_id',$competition->id)->paginate(30);
+        Session::set('sign_excel',SignModel::where('competition_id',$competition->id)->paginate());
         $this->assign('competition',$competition);
         $this->assign('list',$list);
         $this->assign('page',$list->render());
@@ -121,8 +152,47 @@ class Correct extends Controller
         } else {
             return $this->suces('未到评分时间');
         }
-        $list = SignModel::where('file','>','')->where('competition_id',$competition->id)->paginate(50);
+        $list = SignModel::where('file','>','')->where('competition_id',$competition->id)->paginate(30);
         $size = SignModel::where('file','>','')->where('competition_id',$competition->id)->where('point',null)->count();
+        Session::set('good_excel',SignModel::where('file','>','')->where('competition_id',$competition->id)->paginate());
+        $this->assign('competition',$competition);
+        $this->assign('size',$size);
+        $this->assign('list',$list);
+        $this->assign('page',$list->render());
+        return $this->fetch('correct/correct');
+    }
+
+    public function goodsearch()
+    {
+        Session::start();
+        $user = $this->judge();
+        if($user->teacher == 0) {
+            return $this->redirect('index/correct/index');
+        }
+        $competition = CompetitionModel::where('status',1)->find();
+        if($competition == null) {
+            return $this->suces('当前暂无竞赛','logout');
+        }
+        $start_time = $competition->start_time;
+        $end_time = $competition->end_time;
+        $commit_time = $competition->commit_time;
+        $correct_time = $competition->correct_time;
+        $current_time = date('Y-m-d H:i:s');
+        if($current_time > $commit_time) {
+        } else {
+            return $this->suces('未到评分时间');
+        }
+        $teacher = input('post.teacher');
+        $choose = input('post.choose/a')[0];
+        if($choose == null) {
+            $list = SignModel::where('file','>','')->where('competition_id',$competition->id)->where('sign_teacher_renke','LIKE','%'.$teacher.'%')->paginate(30);
+            $size = SignModel::where('file','>','')->where('competition_id',$competition->id)->where('sign_teacher_renke','LIKE','%'.$teacher.'%')->where('point',null)->count();
+            Session::set('good_excel',SignModel::where('file','>','')->where('competition_id',$competition->id)->where('sign_teacher_renke','LIKE','%'.$teacher.'%')->paginate());
+        } else {
+            $list = SignModel::where('file','>','')->where('competition_id',$competition->id)->where('sign_teacher_renke','LIKE','%'.$teacher.'%')->where('point',null)->paginate(30);
+            $size = SignModel::where('file','>','')->where('competition_id',$competition->id)->where('sign_teacher_renke','LIKE','%'.$teacher.'%')->where('point',null)->count();
+            Session::set('good_excel',SignModel::where('file','>','')->where('competition_id',$competition->id)->where('sign_teacher_renke','LIKE','%'.$teacher.'%')->paginate());
+        }
         $this->assign('competition',$competition);
         $this->assign('size',$size);
         $this->assign('list',$list);
@@ -186,7 +256,7 @@ class Correct extends Controller
         $commit_time = $competition->commit_time;
         $correct_time = $competition->correct_time;
         $current_time = date('Y-m-d H:i:s');
-        $array = SignModel::where('competition_id',$competition->id)->paginate();
+        $array = Session::get('sign_excel');
         vendor('PHPExcel.PHPExcel');
         $objPHPExcel = new \PHPExcel();
 
@@ -343,7 +413,7 @@ class Correct extends Controller
         $commit_time = $competition->commit_time;
         $correct_time = $competition->correct_time;
         $current_time = date('Y-m-d H:i:s');
-        $array = SignModel::where('competition_id',$competition->id)->order('point','desc')->paginate();
+        $array = Session::get('good_excel');
         vendor('PHPExcel.PHPExcel');
         $objPHPExcel = new \PHPExcel();
 
