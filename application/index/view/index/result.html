@@ -108,13 +108,12 @@
                             <tr style="min-height: 51px;">
                                 <th style="width: 20%">评语</th>
                                 <td style="width: 80%;">
-                                    {if($sign.pingyu == null)}暂无评奖{/if}
+                                    {if($sign.pingyu == null)}暂无评语{/if}
                                     {if($sign.pingyu != null)}{$sign.pingyu}{/if}
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-                        <a href="{:url('index/index/getexcel')}"><button type="button" class="btn btn-info" style="width: 20%;">获取汇总评分</button></a>
                     </div>
                 </div>
             </div>

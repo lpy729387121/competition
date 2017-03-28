@@ -13,6 +13,7 @@ Route::rule('backstage/title/:id','index/Backstage/title');
 Route::rule('backstage/setonline/:id','index/Backstage/setonline');
 Route::rule('correct/setpoint/:id','index/Correct/setpoint');
 Route::rule('correct/title_pingyu/:id','index/Correct/title_pingyu');
+Route::rule('correct/getfile/:id','index/Correct/getfile');
 
 return [
     '__pattern__' => [
@@ -32,7 +33,6 @@ return [
     'upload'=>'index/index/upload',
     'updatesign'=>'index/index/updatesign',
     'competitionresult'=>'index/index/competitionresult',
-    'getexcel'=>'index/index/getexcel',
     'backstage'=>'index/backstage/index',
     'backstage/login'=>'index/backstage/login',
     'backstage/logout'=>'index/backstage/logout',

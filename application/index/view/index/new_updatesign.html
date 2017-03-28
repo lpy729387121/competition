@@ -51,16 +51,14 @@
                             <input type="text" name="competition_name" value="{$sign.competition.title}" class="form-control" maxlength="28" disabled>
                         </div>
                         <div class="form-group">
-                            <label>社会实践组别</label><small style="color: red"> *</small>
-                            <select class="form-control" name = "title">
+                            <label>社会实践方向</label><small style="color: red"> *</small>
+                            <select class="form-control" name = "type">
                                 <option value=""> </option>
                                 {volist name="sign.competition->types" id="type" }
-                                {volist name="type->titles" id="title" }
-                                <option value="{$title.id}"
-                                {if($title.id == $sign.title_id)}
+                                <option value="{$type.id}"
+                                {if($type.id == $sign.type_id)}
                                         selected{/if}
-                                >{$title.title} 所属大类：{$type.title}</option>
-                                {/volist}
+                                >{$type.title}</option>
                                 {/volist}
                             </select>
                         </div>

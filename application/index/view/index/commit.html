@@ -30,8 +30,8 @@
                                 <td style="width: 80%;">{$sign.competition.title}</td>
                             </tr>
                             <tr style="min-height: 51px;">
-                                <th style="width: 20%">社会实践组别</th>
-                                <td style="width: 80%;">{$sign.title.title} 所属大类:{$sign.title.type.title}</td>
+                                <th style="width: 20%">社会实践方向</th>
+                                <td style="width: 80%;">{$sign.type.title}</td>
                             </tr>
                             <tr style="min-height: 51px;">
                                 <th style="width: 20%">社会实践题目</th>
@@ -103,13 +103,15 @@
                                 </td>
                             </tr>
                             {/volist}
+                            {if($update == 0)}
                             <tr style="min-height: 51px;">
-                                <th style="width: 20%">是否已提交作品</th>
+                                <th style="width: 20%">作品</th>
                                 <td style="width: 80%;">
-                                    {if($sign.file == null)}否{/if}
-                                    {if($sign.file != null)}是{/if}
+                                    {if($sign.file == null)}未提交{/if}
+                                    {if($sign.file != null)}{$sign.true_file_name}{/if}
                                 </td>
                             </tr>
+                            {/if}
                             <tr style="min-height: 51px;">
                                 <th style="width: 20%"><h4>社会实践时间段</h4></th>
                                 <td style="width: 80%;"></td>

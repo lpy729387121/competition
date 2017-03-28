@@ -94,9 +94,8 @@
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th style="width: 10%">大类</th>
-                                        <th style="width: 10%">组别</th>
-                                        <th style="width: 10%">题目</th>
+                                        <th style="width: 10%">社会实践方向</th>
+                                        <th style="width: 10%">社会实践题目</th>
                                         <th style="width: 10%">任课老师</th>
                                         <th style="width: 10%">辅导老师</th>
                                         <th style="width: 10%">队长姓名</th>
@@ -107,8 +106,7 @@
                                     <tbody>
                                     {volist name="list" id="list" }
                                     <tr style="min-height: 51px;">
-                                        <td style="width: 10%">{$list.title.type.title}</td>
-                                        <td style="width: 10%">{$list.title.title}</td>
+                                        <td style="width: 10%">{$list.type.title}</td>
                                         <td style="width: 10%">{$list.sign_title}</td>
                                         <td style="width: 10%">{$list.sign_teacher_renke}</td>
                                         <td style="width: 10%">{$list.sign_teacher}</td>
@@ -143,8 +141,8 @@
                                                                                     <td style="width: 80%;">{$list.competition.title}</td>
                                                                                 </tr>
                                                                                 <tr style="min-height: 51px;">
-                                                                                    <th style="width: 20%">社会实践组别</th>
-                                                                                    <td style="width: 80%;">{$list.title.title} 所属大类:{$list.title.type.title}</td>
+                                                                                    <th style="width: 20%">社会实践方向</th>
+                                                                                    <td style="width: 80%;">{$list.type.title}</td>
                                                                                 </tr>
                                                                                 <tr style="min-height: 51px;">
                                                                                     <th style="width: 20%">社会实践题目</th>

@@ -95,11 +95,10 @@
                                 <table class="table table-striped table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th style="width: 10%">竞赛名称</th>
-                                        <th style="width: 10%">竞赛大类</th>
-                                        <th style="width: 10%">竞赛组别</th>
+                                        <th style="width: 10%">社会实践方向</th>
+                                        <th style="width: 10%">社会实践题目</th>
                                         <th style="width: 10%">状态</th>
-                                        <th style="width: 10%">竞赛作品(文件名为系统自动生成的)</th>
+                                        <th style="width: 10%">作品(点击文件名即可下载)</th>
                                         <th style="width: 10%">作品评分</th>
                                     </tr>
                                     </thead>
@@ -107,12 +106,9 @@
                                     {volist name="list" id="list" }
 
                                     <tr style="min-height: 51px;">
-                                        <td style="width: 10%">{$list.competition.title}</td>
+                                        <td style="width: 10%">{$list.type.title}</td>
                                         <td style="width: 10%">
-                                            {$list.title.type.title}
-                                        </td>
-                                        <td style="width: 10%">
-                                            {$list.title.title}
+                                            {$list.sign_title}
                                         </td>
                                         <td style="width: 10%">
                                             {if($list.point == null)}
@@ -123,7 +119,7 @@
                                             {/if}
                                         </td>
                                         <td style="width: 10%">
-                                            <a href="/uploads/{$list.file}">{$list.file}</a>
+                                            <a href="{:url('index/correct/getfile',['id'=>$list['id']])}">{$list.true_file_name}</a>
                                         </td>
                                         <td>
                                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{$list.id}" style="margin-bottom: 20px;">

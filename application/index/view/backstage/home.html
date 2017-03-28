@@ -113,12 +113,8 @@
                                                     <textarea class="form-control" rows="3"  name="warning" maxlength="300"></textarea>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>社会实践大类数目</label><small style="color: red"> *最多99个</small>
+                                                    <label>社会实践方向数目</label><small style="color: red"> *最多99个</small>
                                                     <input type="text" name="number_type" class="form-control" maxlength="8">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>社会实践题目总数</label><small style="color: red"> *最多99个</small>
-                                                    <input type="text" name="number_title" class="form-control" maxlength="8">
                                                 </div>
                                                 <div class="form-group">
                                                     <label>每组最多报名人数</label><small style="color: red"> *每组最多报名人数应为大于等于1的整数</small>
@@ -173,8 +169,7 @@
                                     <thead>
                                     <tr>
                                         <th style="width: 10%">课程名称</th>
-                                        <th style="width: 10%">大类状态</th>
-                                        <th style="width: 10%">题目状态</th>
+                                        <th style="width: 10%">方向状态</th>
                                         <th style="width: 10%">报名人数</th>
                                         <th style="width: 10%">是否为当前社会实践</th>
                                         <th style="width: 15%">发布时间</th>
@@ -194,14 +189,6 @@
                                             未设置
                                             {/if}
                                         </td>
-                                        <td style="width: 10%">
-                                            {if($list.title_status == 1)}
-                                            已设置
-                                            {/if}
-                                            {if($list.title_status == 0)}
-                                            未设置
-                                            {/if}
-                                        </td>
                                         <td style="width: 10%">{$list.sign}</td>
                                         <td style="width: 10%">
                                             {if($list.status == 1)}
@@ -215,14 +202,14 @@
                                         <td style="width: 15%">
                                             {if($list.type_status==0)}
                                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#{$list.id}" style="margin-bottom: 20px;">
-                                                设置社会实践大类
+                                                设置社会实践方向
                                             </button>
                                             <div class="modal fade" id="{$list.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                            <h4 class="modal-title" id="myModalLabe2">设置社会实践大类</h4>
+                                                            <h4 class="modal-title" id="myModalLabe2">设置社会实践方向</h4>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="row">
@@ -230,7 +217,7 @@
                                                                     <form role="form" method="post" enctype="multipart/form-data" action="{:url('index/backstage/settype',['id'=>$list['id']])}">
                                                                         {for start="0" end="$list.number_type"}
                                                                         <div class="form-group">
-                                                                            <label>大类{$i + 1}</label><small style="color: red"> *最多28字</small>
+                                                                            <label>方向{$i + 1}</label><small style="color: red"> *最多28字</small>
                                                                             <input type="text" name="type{$i+1}" class="form-control" maxlength="28">
                                                                         </div>
                                                                         {/for}
@@ -249,68 +236,8 @@
                                             </div>
                                             {/if}
                                             {if($list.type_status==1)}
-                                            {if($list.title_status==0)}
-                                            <a href="{:url('index/backstage/title',['id'=>$list['id']])}"><button type="button" class="btn btn-success">设置社会实践题目</button></a>
-                                            <!--
-                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#timu{$list.id}" style="margin-bottom: 20px;">
-                                                设置竞赛题目
-                                            </button>
-                                            <div class="modal fade" id="timu{$list.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                            <h4 class="modal-title" id="myModalLabe3">设置竞赛题目</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="row">
-                                                                <div class="col-md-8 col-md-offset-2">
-                                                                    <form role="form" method="post" enctype="multipart/form-data" action="{:url('index/backstage/settitle',['id'=>$list['id']])}">
-                                                                        <?php
-                                                                        $cnt = 0;
-                                                                        ?>
-                                                                        {volist name="list->types" id="type" }
-                                                                        <?php
-                                                                    $type_list = [];
-                                                                    $type_id = [];
-                                                                    $type_list[$cnt] = $type->title;
-                                                                            $type_id[$cnt] = $type->id;
-                                                                            $cnt = $cnt + 1;
-                                                                        ?>
-                                                                        {/volist}
-
-                                                                        {for start="0" end="$list.number_title"}
-                                                                        <div class="form-group">
-                                                                            <label>题目{$i+1}</label><small style="color: red"> *最多28字</small><br/>
-                                                                            所属大类
-                                                                            <select name="type{$i+1}">
-                                                                                <option value="">请选择</option>
-                                                                            </select> <br/>
-                                                                            题目
-                                                                            <input type="text" name="title{$i+1}" class="form-control" maxlength="28">
-                                                                        </div>
-                                                                        {/for}
-                                                                        <label></label>
-                                                                        <input type="hidden" name="__token__" value="{$Request.token}" />
-                                                                        <input type="submit" id="submit3" class="btn btn-success" value=" 确定 " style="width: 100%">
-                                                                    </form>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            -->
-                                            {/if}
-                                            {/if}
-                                            {if($list.type_status==1)}
-                                            {if($list.title_status==1)}
                                             {if($list.status==0)}
                                             <a href="javascript:if(confirm('确定么？'))location='{:url('index/backstage/setonline',['id'=>$list['id']])}'"><button type="button" class="btn btn-success">社会实践上线</button></a>
-                                            {/if}
                                             {/if}
                                             {/if}
                                         </td>

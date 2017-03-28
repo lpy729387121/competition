@@ -70,7 +70,6 @@ class Backstage extends Controller
         $warning = input('post.warning');
         $number = input('number');
         $number_type = input('post.number_type');
-        $number_title = input('post.number_title');
         $start_time = date("Y-m-d H:i:s",strtotime(input('post.start_time')));
         $end_time = date("Y-m-d H:i:s",strtotime(input('post.end_time')));
         $commit_time = date("Y-m-d H:i:s",strtotime(input('post.commit_time')));
@@ -101,13 +100,6 @@ class Backstage extends Controller
         {
             return $this->suces('大类数目必须为数字');
         }
-        if($number_title == null) {
-            return $this->suces('题目总数不能为空');
-        }
-        if(!is_numeric($number_title))
-        {
-            return $this->suces('题目总数必须为数字');
-        }
         if($start_time == null) {
             return $this->suces('报名开始时间不能为空');
         }
@@ -130,7 +122,6 @@ class Backstage extends Controller
         $competition->warning = $warning;
         $competition->number = $number;
         $competition->number_type = $number_type;
-        $competition->number_title = $number_title;
         $competition->start_time = $start_time;
         $competition->end_time = $end_time;
         $competition->commit_time = $commit_time;

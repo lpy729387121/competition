@@ -17,8 +17,8 @@ class Sign extends Model
     {
         return $this->belongsTo('Competition');
     }
-    public function title()
+    public function type()
     {
-        return $this->belongsTo('Title');
+        return $this->belongsTo('Type');
     }
 }
