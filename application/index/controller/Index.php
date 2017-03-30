@@ -99,7 +99,7 @@ class Index extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无社会实践','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -136,7 +136,7 @@ class Index extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无社会实践','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -173,7 +173,7 @@ class Index extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无社会实践','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -229,10 +229,10 @@ class Index extends Controller
             return $this->suces('邮件不能为空');
         }
         if($type_id == null) {
-            return $this->suces('请选择社会实践方向');
+            return $this->suces('请选择社会调查类别');
         }
         if($sign_title == null) {
-            return $this->suces('社会实践题目不能为空');
+            return $this->suces('社会调查题目不能为空');
         }
         if($sign_teacher_renke == null) {
             return $this->suces('任课老师不能为空');
@@ -287,7 +287,7 @@ class Index extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无社会实践','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -338,7 +338,7 @@ class Index extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无社会实践','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -374,7 +374,7 @@ class Index extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无社会实践','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -426,7 +426,7 @@ class Index extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无社会实践','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -462,7 +462,7 @@ class Index extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无社会实践','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -518,10 +518,10 @@ class Index extends Controller
             return $this->suces('邮件不能为空');
         }
         if($type_id == null) {
-            return $this->suces('请选择社会实践方向');
+            return $this->suces('请选择社会调查类别');
         }
         if($sign_title == null) {
-            return $this->suces('社会实践题目不能为空');
+            return $this->suces('社会调查题目不能为空');
         }
         if($sign_teacher_renke == null) {
             return $this->suces('任课老师不能为空');

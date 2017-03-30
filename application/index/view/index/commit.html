@@ -5,26 +5,26 @@
 
     <meta charset="UTF-8">
     <link href="/static/assets/css/bootstrap.css" rel="stylesheet" />
-    <title>{if($update == 1)}社会实践信息{/if}
+    <title>{if($update == 1)}社会调查信息{/if}
             {if($commit == 1)}作品提交{/if}
         {if($correct == 1)}作品审阅中{/if}</title>
 </head>
 <body>
 <div class="container">
     <h1 style="text-align: center">"{$competition.title}"
-        {if($update == 1)}社会实践信息{/if}
-        {if($commit == 1)}社会实践作品提交{/if}
-        {if($correct == 1)}社会实践作品审阅中{/if}</h1>
+        {if($update == 1)}社会调查信息{/if}
+        {if($commit == 1)}社会调查作品提交{/if}
+        {if($correct == 1)}社会调查作品审阅中{/if}</h1>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading" style="min-height: 0">社会实践信息</div>
+                <div class="panel-heading" style="min-height: 0">社会调查信息</div>
                 <div class="panel-body">
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover">
                             <tbody>
                             <tr style="min-height: 51px;">
-                                <th style="width: 20%"><h4>社会实践信息</h4></th>
+                                <th style="width: 20%"><h4>社会调查信息</h4></th>
                                 <td style="width: 80%;"></td>
                             </tr>
                             <tr style="min-height: 51px;">
@@ -32,11 +32,11 @@
                                 <td style="width: 80%;">{$sign.competition.title}</td>
                             </tr>
                             <tr style="min-height: 51px;">
-                                <th style="width: 20%">社会实践方向</th>
+                                <th style="width: 20%">社会调查类别</th>
                                 <td style="width: 80%;">{$sign.type.title}</td>
                             </tr>
                             <tr style="min-height: 51px;">
-                                <th style="width: 20%">社会实践题目</th>
+                                <th style="width: 20%">社会调查题目</th>
                                 <td style="width: 80%;">
                                     {if($sign.sign_title == null)}无{/if}
                                     {if($sign.sign_title != null)}{$sign.sign_title}{/if}
@@ -115,7 +115,7 @@
                             </tr>
                             {/if}
                             <tr style="min-height: 51px;">
-                                <th style="width: 20%"><h4>社会实践时间段</h4></th>
+                                <th style="width: 20%"><h4>社会调查时间段</h4></th>
                                 <td style="width: 80%;"></td>
                             </tr>
                             {if($update == 1)}

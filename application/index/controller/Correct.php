@@ -66,7 +66,7 @@ class Correct extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无竞赛','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $teacher = input('post.teacher');
         $start_time = $competition->start_time;
@@ -95,7 +95,7 @@ class Correct extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无竞赛','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -123,7 +123,7 @@ class Correct extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无竞赛','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $pingyu = input('post.pingyu');
         $sign = SignModel::get($id);
@@ -141,7 +141,7 @@ class Correct extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无竞赛','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -171,7 +171,7 @@ class Correct extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无竞赛','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -208,7 +208,7 @@ class Correct extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无竞赛','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -249,7 +249,7 @@ class Correct extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无竞赛','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -268,8 +268,8 @@ class Correct extends Controller
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setTitle('报名信息');
 
-        $objPHPExcel->getActiveSheet()->setCellValue('A1', '社会实践方向');
-        $objPHPExcel->getActiveSheet()->setCellValue('B1', '社会实践题目');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', '社会调查类别');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', '社会调查题目');
         $objPHPExcel->getActiveSheet()->setCellValue('C1', '任课老师');
         $objPHPExcel->getActiveSheet()->setCellValue('D1', '指导老师');
         $objPHPExcel->getActiveSheet()->setCellValue('E1', '队长姓名');
@@ -340,7 +340,7 @@ class Correct extends Controller
         header("Content-Type:application/vnd.ms-execl");
         header("Content-Type:application/octet-stream");
         header("Content-Type:application/download");
-        header('Content-Disposition:attachment;filename="'.$competition->title.'社会实践报名汇总.xls"');
+        header('Content-Disposition:attachment;filename="'.$competition->title.'社会调查报名汇总.xls"');
         header("Content-Transfer-Encoding:binary");
         $write->save('php://output');
     }
@@ -354,7 +354,7 @@ class Correct extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无竞赛','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $sign = SignModel::get($id);
         if($sign == null) {
@@ -406,7 +406,7 @@ class Correct extends Controller
         }
         $competition = CompetitionModel::where('status',1)->find();
         if($competition == null) {
-            return $this->suces('当前暂无竞赛','logout');
+            return $this->suces('当前暂无社会调查','logout');
         }
         $start_time = $competition->start_time;
         $end_time = $competition->end_time;
@@ -425,8 +425,8 @@ class Correct extends Controller
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setTitle('评分信息');
 
-        $objPHPExcel->getActiveSheet()->setCellValue('A1', '社会实践方向');
-        $objPHPExcel->getActiveSheet()->setCellValue('B1', '社会实践题目');
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', '社会调查方向');
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', '社会调查题目');
         $objPHPExcel->getActiveSheet()->setCellValue('C1', '任课老师');
         $objPHPExcel->getActiveSheet()->setCellValue('D1', '指导老师');
         $objPHPExcel->getActiveSheet()->setCellValue('E1', '队长姓名');
@@ -499,7 +499,7 @@ class Correct extends Controller
         header("Content-Type:application/vnd.ms-execl");
         header("Content-Type:application/octet-stream");
         header("Content-Type:application/download");
-        header('Content-Disposition:attachment;filename="'.$competition->title.'社会实践评分汇总.xls"');
+        header('Content-Disposition:attachment;filename="'.$competition->title.'社会调查评分汇总.xls"');
         header("Content-Transfer-Encoding:binary");
         $write->save('php://output');
     }

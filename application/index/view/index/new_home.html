@@ -9,7 +9,7 @@
 
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-    <title>社会实践作品上传</title>
+    <title>社会调查作品上传</title>
 
     <link href="/static/assets/css/bootstrap.css" rel="stylesheet" />
 
@@ -25,10 +25,10 @@
 
     <div class="login-banner"></div>
 
-    <h1 style="text-align: center">"{$competition.title}"社会实践作品上传</h1><br/>
-    <h3 style="text-align: center">社会实践说明</h3>
+    <h1 style="text-align: center">"{$competition.title}"社会调查作品上传</h1><br/>
+    <h3 style="text-align: center">社会调查说明</h3>
     <p style="text-align: center">{$competition.body}</p><br/>
-    <h3 style="text-align: center">社会实践方向</h3>
+    <h3 style="text-align: center">社会调查方向</h3>
     {volist name="competition->types" id="item" }
     <p style="text-align: center">{$item.title}</p>
     {/volist}<br/>

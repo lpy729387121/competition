@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="container">
-    <h1 style="text-align: center">"{$competition.title}"社会实践信息填写</h1>
+    <h1 style="text-align: center">"{$competition.title}"社会调查信息填写</h1>
     <form role="form" method="post" enctype="multipart/form-data" action="{:url('index/index/signforcompetition',['id'=>$user['id']])}">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
@@ -46,14 +46,14 @@
                         </div>
                     </div>
 
-                    <div class="panel-heading" style="min-height: 0">社会实践信息</div>
+                    <div class="panel-heading" style="min-height: 0">社会调查信息</div>
                     <div class="panel-body">
                         <div class="form-group">
                             <label>课程名称</label>
                             <input type="text" name="competition_name" value="{$competition.title}" class="form-control" maxlength="28" disabled>
                         </div>
                         <div class="form-group">
-                            <label>社会实践方向</label><small style="color: red"> *</small>
+                            <label>社会调查类别</label><small style="color: red"> *</small>
                             <select class="form-control" name = "type">
                                 <option value=""> </option>
                                 {volist name="competition->types" id="type" }
@@ -62,7 +62,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>社会实践题目</label><small style="color: red"> *</small>
+                            <label>社会调查题目</label><small style="color: red"> *</small>
                             <input type="text" name="sign_title" value="" class="form-control" maxlength="28">
                         </div>
                         <div class="form-group">

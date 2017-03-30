@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta content="" name="description" />
     <meta content="webthemez" name="author" />
-    <title>社会实践管理</title>
+    <title>社会调查管理</title>
     <!-- Bootstrap Styles-->
     <link href="/static/assets/css/bootstrap.css" rel="stylesheet" />
     <!-- FontAwesome Styles-->
@@ -76,9 +76,9 @@
 
     <div id="page-wrapper">
         <div class="header">
-            <h1 class="page-header">社会实践管理<small>Welcome {$Request.session.user_name}</small></h1>
+            <h1 class="page-header">社会调查管理<small>Welcome {$Request.session.user_name}</small></h1>
             <ol class="breadcrumb">
-                <li class="active"> 社会实践管理</li>
+                <li class="active"> 社会调查管理</li>
             </ol>
         </div>
         <div id="page-inner" style="min-height:1000px;">
@@ -87,7 +87,7 @@
                 <div class="col-md-12">
 
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#0" style="margin-bottom: 20px;">
-                        发布社会实践
+                        发布社会调查
                     </button>
 
 
@@ -96,7 +96,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                    <h4 class="modal-title" id="myModalLabe2">发布社会实践</h4>
+                                    <h4 class="modal-title" id="myModalLabe2">发布社会调查</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
@@ -108,7 +108,7 @@
                                                 </div>
                                                 <!--
                                                 <div class="form-group">
-                                                    <label>社会实践说明</label><small style="color: red"> *最多300字</small>
+                                                    <label>社会调查说明</label><small style="color: red"> *最多300字</small>
                                                     <textarea class="form-control" rows="3" value="{$Think.session.body}" name="body" maxlength="300"></textarea>
                                                 </div>
                                                 <div class="form-group">
@@ -117,7 +117,7 @@
                                                 </div>
                                                 -->
                                                 <div class="form-group">
-                                                    <label>社会实践方向数目</label><small style="color: red"> *最多99个</small>
+                                                    <label>社会调查类别数目</label><small style="color: red"> *最多99个</small>
                                                     <input type="text" name="number_type" class="form-control" maxlength="8">
                                                 </div>
                                                 <div class="form-group">
@@ -166,7 +166,7 @@
                     </div>
 
                     <div class="panel panel-default">
-                        <div class="panel-heading" style="min-height: 0">社会实践列表 </div>
+                        <div class="panel-heading" style="min-height: 0">社会调查列表 </div>
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover">
@@ -175,7 +175,7 @@
                                         <th style="width: 10%">课程名称</th>
                                         <th style="width: 10%">方向状态</th>
                                         <th style="width: 10%">报名人数</th>
-                                        <th style="width: 10%">是否为当前社会实践</th>
+                                        <th style="width: 10%">是否为当前社会调查</th>
                                         <th style="width: 15%">发布时间</th>
                                         <th style="width: 15%">操作</th>
                                     </tr>
@@ -206,14 +206,14 @@
                                         <td style="width: 15%">
                                             {if($list.type_status==0)}
                                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#{$list.id}" style="margin-bottom: 20px;">
-                                                设置社会实践方向
+                                                设置社会调查类别
                                             </button>
                                             <div class="modal fade" id="{$list.id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                                            <h4 class="modal-title" id="myModalLabe2">设置社会实践方向</h4>
+                                                            <h4 class="modal-title" id="myModalLabe2">设置社会调查类别</h4>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="row">
@@ -241,7 +241,7 @@
                                             {/if}
                                             {if($list.type_status==1)}
                                             {if($list.status==0)}
-                                            <a href="javascript:if(confirm('确定么？'))location='{:url('index/backstage/setonline',['id'=>$list['id']])}'"><button type="button" class="btn btn-success">社会实践上线</button></a>
+                                            <a href="javascript:if(confirm('确定么？'))location='{:url('index/backstage/setonline',['id'=>$list['id']])}'"><button type="button" class="btn btn-success">社会调查上线</button></a>
                                             {/if}
                                             {/if}
                                         </td>

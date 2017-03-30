@@ -88,11 +88,11 @@ class Backstage extends Controller
             return $this->suces('每组最多报名人数应为大于等于1的整数');
         }
         if($number_type == null) {
-            return $this->suces('大类数目不能为空');
+            return $this->suces('类别数目不能为空');
         }
         if(!is_numeric($number_type))
         {
-            return $this->suces('大类数目必须为数字');
+            return $this->suces('类别数目必须为数字');
         }
         if($start_time == null) {
             return $this->suces('报名开始时间不能为空');
